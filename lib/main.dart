@@ -1,4 +1,5 @@
 import 'package:FinTask/controller.dart';
+import 'package:FinTask/pages/home.dart';
 import 'package:FinTask/pages/login.dart';
 import 'package:FinTask/pages/profile.dart';
 import 'package:FinTask/pages/signup.dart';
@@ -32,8 +33,8 @@ void main() async {
         debugShowCheckedModeBanner: false,
         home: isFirstRun ? const Welcome() : const Welcome(),
         routes: {
-          '/homecontroller': (context) => const Controller(),
-          // '/home': (context) => const Home(),
+          '/homecontroller': (context) =>  Controller(),
+          '/home': (context) => const Home(),
           '/login': (context) => const Login(),
           // '/otp': (context) => const OTP(),
           '/signup': (context) => const SignUp(),
@@ -41,19 +42,17 @@ void main() async {
           '/setting': (context) => const Profile(),
         },
         theme: ThemeData(
-          primarySwatch: Colors.blue,
-          fontFamily: "Agbalumo",
-          hintColor: Colors.white,
-          textTheme: const TextTheme(
-            bodyLarge: TextStyle(color: Colors.white),
-            bodyMedium: TextStyle(color: Colors.white),
-            bodySmall: TextStyle(color: Colors.white),
-            labelLarge: TextStyle(color: Colors.white),
-            labelMedium: TextStyle(color: Colors.white),
-            labelSmall: TextStyle(color: Colors.white),
-            
-          )
-        ),
+            primarySwatch: Colors.blue,
+            fontFamily: "Agbalumo",
+            hintColor: Colors.white,
+            textTheme: const TextTheme(
+              bodyLarge: TextStyle(color: Colors.white),
+              bodyMedium: TextStyle(color: Colors.white),
+              bodySmall: TextStyle(color: Colors.white),
+              labelLarge: TextStyle(color: Colors.white),
+              labelMedium: TextStyle(color: Colors.white),
+              labelSmall: TextStyle(color: Colors.white),
+            )),
       ),
     ),
   ));

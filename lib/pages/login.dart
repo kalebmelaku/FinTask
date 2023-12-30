@@ -1,6 +1,7 @@
 import 'package:FinTask/includes/colors.dart';
 import 'package:FinTask/includes/header.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Login extends StatefulWidget {
@@ -30,18 +31,21 @@ class _LoginState extends State<Login> {
               children: <Widget>[
                 Expanded(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       const Header(
                           pageName: "Login", pageDesc: "Login to your account"),
-                      // SizedBox(
-                      //   height: 5.h,
-                      // ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
                       // if (servErr != null)
                       //   Text(
                       //     servErr!,
                       //     style: const TextStyle(color: Colors.redAccent),
                       //   ),
+                      SizedBox(
+                        height: 50.h,
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         child: Column(
@@ -52,6 +56,9 @@ class _LoginState extends State<Login> {
                               keyType: TextInputType.emailAddress,
                               controller: _email,
                               error: emailErr,
+                            ),
+                            SizedBox(
+                              height: 10.h,
                             ),
                             makeInput(
                               label: "Password",
@@ -65,9 +72,15 @@ class _LoginState extends State<Login> {
                               children: [
                                 TextButton(
                                     onPressed: () => {},
-                                    child: const Text("Forget Password?", style: TextStyle(color: Colors.white),))
+                                    child: const Text(
+                                      "Forget Password?",
+                                      style: TextStyle(color: Colors.white),
+                                    ))
                               ],
-                            )
+                            ),
+                            SizedBox(
+                              height: 25.h,
+                            ),
                           ],
                         ),
                       ),
@@ -76,24 +89,26 @@ class _LoginState extends State<Login> {
                         child: Container(
                           padding: const EdgeInsets.only(top: 3, left: 3),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
+                              borderRadius: BorderRadius.circular(15),
                               border: const Border(
-                                bottom: BorderSide(color: Colors.black),
-                                top: BorderSide(color: Colors.black),
-                                left: BorderSide(color: Colors.black),
-                                right: BorderSide(color: Colors.black),
+                                bottom: BorderSide(color: Colors.white),
+                                top: BorderSide(color: Colors.white),
+                                left: BorderSide(color: Colors.white),
+                                right: BorderSide(color: Colors.white),
                               )),
                           child: MaterialButton(
                             minWidth: double.infinity,
-                            height: 45.h,
+                            height: 35.h,
                             onPressed: () {
-                              Navigator.of(context).pushNamed("/homecontroller");
+                              HapticFeedback.vibrate();
+                              Navigator.of(context)
+                                  .pushNamed("/home");
                               // validateInput();
                             },
                             color: MyColors.primaryColor,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50)),
+                                borderRadius: BorderRadius.circular(15)),
                             child: Text(
                               "Login",
                               style: TextStyle(
@@ -103,6 +118,9 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                         ),
+                      ),
+                      SizedBox(
+                        height: 25.h,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -127,11 +145,11 @@ class _LoginState extends State<Login> {
                 ),
                 Container(
                   height: MediaQuery.of(context).size.height / 3.5,
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                    image: AssetImage('assets/login.png'),
-                    fit: BoxFit.cover,
-                  )),
+                  // decoration: const BoxDecoration(
+                  //     image: DecorationImage(
+                  //   image: AssetImage('assets/login.png'),
+                  //   fit: BoxFit.cover,
+                  // )),
                 )
               ],
             ),
@@ -166,10 +184,10 @@ Widget makeInput({label, obscureText, keyType, controller, error}) {
           enabledBorder: OutlineInputBorder(
               borderSide:
                   const BorderSide(color: Color.fromRGBO(189, 189, 189, 1)),
-              borderRadius: BorderRadius.circular(50)),
+              borderRadius: BorderRadius.circular(15)),
           border: OutlineInputBorder(
               // borderSide: BorderSide(color: Color.fromRGBO(189, 189, 189, 1)),
-              borderRadius: BorderRadius.circular(50)),
+              borderRadius: BorderRadius.circular(15)),
         ),
       ),
       if (error != null)
@@ -177,9 +195,6 @@ Widget makeInput({label, obscureText, keyType, controller, error}) {
           error,
           style: TextStyle(color: Colors.redAccent, fontSize: 13.sp),
         ),
-      SizedBox(
-        height: 10.h,
-      ),
     ],
   );
 }

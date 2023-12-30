@@ -80,16 +80,16 @@ class _SignUpState extends State<SignUp> {
                 Container(
                   padding: const EdgeInsets.only(top: 3, left: 3),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
+                      borderRadius: BorderRadius.circular(15),
                       border: const Border(
-                        bottom: BorderSide(color: Colors.black),
-                        top: BorderSide(color: Colors.black),
-                        left: BorderSide(color: Colors.black),
-                        right: BorderSide(color: Colors.black),
+                        bottom: BorderSide(color: Colors.white),
+                        top: BorderSide(color: Colors.white),
+                        left: BorderSide(color: Colors.white),
+                        right: BorderSide(color: Colors.white),
                       )),
                   child: MaterialButton(
                     minWidth: double.infinity,
-                    height: 45.h,
+                    height: 35.h,
                     onPressed: () {
                       // validateInput();
                       Navigator.of(context).pushNamed("/homecontroller");
@@ -97,7 +97,7 @@ class _SignUpState extends State<SignUp> {
                     color: MyColors.primaryColor,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50)),
+                        borderRadius: BorderRadius.circular(15)),
                     child: Text(
                       "Signup",
                       style: TextStyle(
@@ -169,10 +169,10 @@ Widget makeInput(
           enabledBorder: OutlineInputBorder(
               borderSide:
                   const BorderSide(color: Color.fromRGBO(189, 189, 189, 1)),
-              borderRadius: BorderRadius.circular(50)),
+              borderRadius: BorderRadius.circular(15)),
           border: OutlineInputBorder(
               // borderSide: BorderSide(color: Color.fromRGBO(189, 189, 189, 1)),
-              borderRadius: BorderRadius.circular(50)),
+              borderRadius: BorderRadius.circular(15)),
         ),
       ),
       if (error != null)

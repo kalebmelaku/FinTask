@@ -1,113 +1,129 @@
 import 'package:FinTask/includes/colors.dart';
+import 'package:FinTask/pages/login.dart';
+import 'package:FinTask/pages/signup.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:introduction_screen/introduction_screen.dart';
 import 'package:lottie/lottie.dart';
 
-class Welcome extends StatelessWidget {
+class Welcome extends StatefulWidget {
   const Welcome({super.key});
 
   @override
+  State<Welcome> createState() => _WelcomeState();
+}
+
+class _WelcomeState extends State<Welcome> {
+  final introKey = GlobalKey<IntroductionScreenState>();
+
+  void _onIntroEnd(context) {
+    Navigator.of(context).pushNamed("/signup");
+  }
+
+  Widget _buildImage(String assetName, [double width = 350]) {
+    return Image.asset('assets/$assetName', width: width);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyColors.backgroundColor,
-      body: SafeArea(
-        child: Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Text(
-                    "Welcome",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 45.sp, color: Colors.white),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "Setup your account or login to existing one",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white60, fontSize: 20.sp),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 3,
-                width: double.infinity,
-                child: Lottie.asset(
-                  './animations/welcome.json',
-                  repeat: true,
-                  frameRate: FrameRate(60),
-                  fit: BoxFit.cover,
-                  height: MediaQuery.of(context).size.height * 2,
-                  width: MediaQuery.of(context).size.width * 2,
-                ),
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Column(
-                children: <Widget>[
-                  MaterialButton(
-                    minWidth: double.infinity,
-                    height: 45.h,
-                    
-                    onPressed: () {
-                      Navigator.of(context).pushNamed("/login");
-                    },
-                    shape: RoundedRectangleBorder(
-                        side: const BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.circular(50)),
-                    child: Text(
-                      "Login",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 18.sp, color: Colors.white),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 3, left: 3),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        border: const Border(
-                          bottom: BorderSide(color: Colors.black),
-                          top: BorderSide(color: Colors.black),
-                          left: BorderSide(color: Colors.black),
-                          right: BorderSide(color: Colors.black),
-                        )),
-                    child: MaterialButton(
-                      minWidth: double.infinity,
-                      height: 45.h,
-                      onPressed: () {
-                        Navigator.of(context).pushNamed("/signup");
-                      },
-                      color: MyColors.primaryColor,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50)),
-                      child: Text(
-                        "Sign up",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20.sp,
-                            color: Colors.white),
-                      ),
-                    ),
-                  )
-                ],
-              )
-            ],
+    const bodyStyle = TextStyle(fontSize: 19.0);
+
+    var pageDecoration = PageDecoration(
+      titleTextStyle:
+          const TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
+      bodyTextStyle: bodyStyle,
+      bodyPadding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+      pageColor: MyColors.backgroundColor,
+      imagePadding: EdgeInsets.zero,
+    );
+
+    return IntroductionScreen(
+      key: introKey,
+      globalBackgroundColor: MyColors.backgroundColor,
+      allowImplicitScrolling: true,
+      // autoScrollDuration: null,
+      // infiniteAutoScroll: true,
+      pages: [
+        PageViewModel(
+          title: "Welcome",
+          body:
+              "Welcome to FinTask – where task management meets finance tracking. Your all-in-one solution for productivity and financial success.",
+          image: Container(
+            margin: EdgeInsets.only( top: 25.h),
+            child: Lottie.asset(
+              './animations/welcome.json', // Replace with the path to your Lottie animation file
+              width: 300,
+              height: 300,
+              fit: BoxFit.contain,
+            ),
           ),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Task Management",
+          body:
+              "Effortlessly organize your tasks. Prioritize, set due dates, and boost your productivity with FinTask.",
+            image: Lottie.asset(
+            './animations/task.json', // Replace with the path to your Lottie animation file
+            width: 300,
+            height: 300,
+            fit: BoxFit.cover,
+          ),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Finance Tracking",
+          body:
+              "Take control of your finances and monitor expenses. FinTask - Your path to financial freedom.",
+          image: Lottie.asset(
+            './animations/finance.json', // Replace with the path to your Lottie animation file
+            width: 300,
+            height: 300,
+            fit: BoxFit.cover,
+          ),
+          decoration: pageDecoration,
+        ),
+      ],
+      onDone: () => _onIntroEnd(context),
+      onSkip: () => _onIntroEnd(context), // You can override onSkip callback
+      showSkipButton: true,
+      skipOrBackFlex: 0,
+      nextFlex: 0,
+      initialPage: 0,
+      showBackButton: false,
+      //rtl: true, // Display as right-to-left
+      back: const Icon(
+        Icons.arrow_back,
+        color: Colors.white,
+      ),
+      skip: const Text('Skip',
+          style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+      next: const Icon(
+        Icons.arrow_forward,
+        color: Colors.white,
+      ),
+      done: const Text('Done',
+          style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+      curve: Curves.fastLinearToSlowEaseIn,
+      controlsMargin: const EdgeInsets.all(16),
+      controlsPadding: kIsWeb
+          ? const EdgeInsets.all(12.0)
+          : const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+      dotsDecorator: const DotsDecorator(
+        size: Size(10.0, 10.0),
+        color: Colors.white,
+        activeSize: Size(22.0, 10.0),
+        activeShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+        ),
+      ),
+      dotsContainerDecorator: ShapeDecoration(
+        color: MyColors.primaryColor,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
       ),
     );
   }
-  
 }

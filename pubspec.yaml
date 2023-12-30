@@ -23,6 +23,8 @@ dependencies:
   accordion: ^2.6.0
   dio: ^5.3.4
   permission_handler: ^11.1.0
+  introduction_screen: ^3.1.12
+  flutter_floating_bottom_bar: ^1.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
