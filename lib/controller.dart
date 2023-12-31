@@ -4,8 +4,8 @@ import 'package:FinTask/pages/home.dart';
 import 'package:flutter/material.dart';
 
 class Controller extends StatefulWidget {
+  Controller({super.key});
   int selectedIndex = 0;
-  Controller();
 
   @override
   State<Controller> createState() => _ControllerState();
