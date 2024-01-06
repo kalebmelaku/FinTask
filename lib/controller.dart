@@ -48,8 +48,8 @@ class _ControllerState extends State<Controller> {
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
       body: PageStorage(
-        child: currentScreen,
         bucket: bucket,
+        child: currentScreen,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: MyColors.secondaryColor,

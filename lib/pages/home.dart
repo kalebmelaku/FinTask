@@ -1,4 +1,6 @@
 import "package:FinTask/includes/colors.dart";
+import "package:FinTask/includes/credit_card.dart";
+import "package:FinTask/includes/top_info.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 
@@ -9,7 +11,21 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+  late TabController tabController;
+
+  @override
+  void initState() {
+    tabController = TabController(length: 2, vsync: this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,88 +35,64 @@ class _HomeState extends State<Home> {
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(
-                      "Hi Name",
-                      style: TextStyle(fontSize: 23.sp),
-                    ),
-                  ),
-                  CircleAvatar(
-                    radius: 25,
-                    backgroundColor: MyColors.secondaryColor,
-                  ),
-                ],
-              ),
-              SizedBox(
+              const TopInfo(),
+              Container(
                 height: 15.h,
+                color: MyColors.backgroundColor,
               ),
-              Card(
-                color: MyColors.primaryColor,
+              const CreditCard(),
+              Container(
+                decoration: BoxDecoration(
+                    color: MyColors.tertiaryColor,
+                    borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            topRight: Radius.circular(15),
+                            bottomLeft: Radius.circular(0),
+                            bottomRight: Radius.circular(15)
+                          )),
+                child: TabBar(
+                  dividerHeight: 0,
+                  indicator: null,
+                  unselectedLabelColor: Colors.white,
+                  labelColor: Colors.black,
+                  indicatorColor: Colors.transparent,
+                  controller: tabController,
+                  tabs: const [
+                    Tab(
+                      text: "Task",
+                    ),
+                    Tab(
+                      text: 'Expense',
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
                 child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      Row(
+                  decoration: BoxDecoration(
+                      color: MyColors.tertiaryColor,
+                      borderRadius:
+                          const BorderRadius.only(
+                            topLeft: Radius.circular(0),
+                            topRight: Radius.circular(15),
+                            bottomLeft: Radius.circular(15),
+                            bottomRight: Radius.circular(15)
+                          )),
+                  child: TabBarView(
+                    controller: tabController,
+                    children: const [
+                      Column(
                         children: [
-                          Text(
-                            "Welcome!",
-                            style: TextStyle(fontSize: 30.sp),
-                          ),
+                          Text('data'),
+                          Text('data'),
+                          Text('data'),
                         ],
                       ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Balance",
-                                style: TextStyle(fontSize: 25.sp),
-                              ),
-                              SizedBox(
-                                height: 3.h,
-                              ),
-                              Text(
-                                "25000\$",
-                                style: TextStyle(
-                                    fontSize: 30.sp,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Credit",
-                                style: TextStyle(fontSize: 25.sp),
-                              ),
-                              SizedBox(
-                                height: 3.h,
-                              ),
-                              Text(
-                                "25000\$",
-                                style: TextStyle(
-                                    fontSize: 30.sp,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                      Text("data")
                     ],
                   ),
                 ),
-              ),
+              )
             ],
           ),
         ),

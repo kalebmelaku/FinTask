@@ -102,7 +102,7 @@ class _LoginState extends State<Login> {
                             onPressed: () {
                               HapticFeedback.vibrate();
                               Navigator.of(context)
-                                  .pushNamed("/home");
+                                  .pushNamed("/homecontroller");
                               // validateInput();
                             },
                             color: MyColors.primaryColor,
