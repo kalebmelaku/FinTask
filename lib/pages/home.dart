@@ -1,5 +1,7 @@
 import "package:FinTask/includes/colors.dart";
 import "package:FinTask/includes/credit_card.dart";
+import "package:FinTask/includes/expenses_box.dart";
+import "package:FinTask/includes/tasks_box.dart";
 import "package:FinTask/includes/top_info.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -13,7 +15,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late TabController tabController;
-
+  bool tabs = true;
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
@@ -41,58 +43,64 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 color: MyColors.backgroundColor,
               ),
               const CreditCard(),
-              Container(
-                decoration: BoxDecoration(
-                    color: MyColors.tertiaryColor,
-                    borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: tabs
+                            ? MyColors.tertiaryColor
+                            : MyColors.backgroundColor,
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(20),
                             topRight: Radius.circular(15),
                             bottomLeft: Radius.circular(0),
-                            bottomRight: Radius.circular(15)
-                          )),
-                child: TabBar(
-                  dividerHeight: 0,
-                  indicator: null,
-                  unselectedLabelColor: Colors.white,
-                  labelColor: Colors.black,
-                  indicatorColor: Colors.transparent,
-                  controller: tabController,
-                  tabs: const [
-                    Tab(
-                      text: "Task",
-                    ),
-                    Tab(
-                      text: 'Expense',
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: MyColors.tertiaryColor,
-                      borderRadius:
-                          const BorderRadius.only(
-                            topLeft: Radius.circular(0),
-                            topRight: Radius.circular(15),
-                            bottomLeft: Radius.circular(15),
-                            bottomRight: Radius.circular(15)
-                          )),
-                  child: TabBarView(
-                    controller: tabController,
-                    children: const [
-                      Column(
-                        children: [
-                          Text('data'),
-                          Text('data'),
-                          Text('data'),
-                        ],
+                            bottomRight: Radius.circular(0)),
                       ),
-                      Text("data")
-                    ],
+                      child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            tabs = true;
+                          });
+                        },
+                        child: Text(
+                          "Tasks",
+                          style:
+                              TextStyle(color: Colors.white, fontSize: 20.sp),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              )
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: tabs
+                              ? MyColors.backgroundColor
+                              : MyColors.tertiaryColor,
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15),
+                              bottomLeft: Radius.circular(0),
+                              bottomRight: Radius.circular(0))),
+                      child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            tabs = false;
+                          });
+                        },
+                        child: Text(
+                          "Expenses",
+                          style:
+                              TextStyle(color: Colors.white, fontSize: 20.sp),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              tabs ? const TasksBox() : const ExpensesBox()
             ],
           ),
         ),
