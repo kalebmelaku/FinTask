@@ -3,6 +3,7 @@ import 'package:FinTask/pages/credit.dart';
 import 'package:FinTask/pages/home.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class Controller extends StatefulWidget {
   Controller({super.key});
   int selectedIndex = 0;
@@ -53,7 +54,7 @@ class _ControllerState extends State<Controller> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: MyColors.secondaryColor,
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: Colors.white,),
         onPressed: () {
           print("add fab button");
         },
