@@ -2,6 +2,7 @@ import 'package:FinTask/includes/colors.dart';
 import 'package:FinTask/pages/credit.dart';
 import 'package:FinTask/pages/home.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 // ignore: must_be_immutable
 class Controller extends StatefulWidget {
@@ -54,7 +55,10 @@ class _ControllerState extends State<Controller> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: MyColors.secondaryColor,
-        child: const Icon(Icons.add, color: Colors.white,),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
         onPressed: () {
           print("add fab button");
         },
@@ -114,14 +118,20 @@ class _ControllerState extends State<Controller> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.person,
+                        // Icon(
+                        //   Icons.person,
+                        //   color: currentIndex == 1
+                        //       ? MyColors.primaryColor
+                        //       : Colors.white,
+                        // ),
+                        FaIcon(
+                          FontAwesomeIcons.commentDollar,
                           color: currentIndex == 1
                               ? MyColors.primaryColor
                               : Colors.white,
                         ),
                         Text(
-                          "Home",
+                          "Expense",
                           style: TextStyle(
                               color: currentIndex == 1
                                   ? MyColors.primaryColor
@@ -147,13 +157,13 @@ class _ControllerState extends State<Controller> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.person_pin_outlined,
+                          Icons.receipt,
                           color: currentIndex == 2
                               ? MyColors.primaryColor
                               : Colors.white,
                         ),
                         Text(
-                          "Team",
+                          "Credit",
                           style: TextStyle(
                               color: currentIndex == 2
                                   ? MyColors.primaryColor
@@ -174,13 +184,13 @@ class _ControllerState extends State<Controller> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.more_horiz_outlined,
+                          Icons.settings,
                           color: currentIndex == 3
                               ? MyColors.primaryColor
                               : Colors.white,
                         ),
                         Text(
-                          "More",
+                          "Setting",
                           style: TextStyle(
                               color: currentIndex == 3
                                   ? MyColors.primaryColor

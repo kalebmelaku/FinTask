@@ -28,20 +28,21 @@ class _TasksBoxState extends State<TasksBox> {
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         children: [
-          cont(),
-          cont(),
-          cont(),
-          cont(),
-          cont(),
+          CustomTile(),
+          CustomTile(),
+          CustomTile(),
+          CustomTile(),
+          CustomTile(),
         ],
       ),
     ));
   }
 
-  Widget cont() {
+  Widget CustomTile() {
     return Column(
       children: [
         Container(
+ 
           decoration: BoxDecoration(
             color: MyColors.secondaryColor,
             borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -68,14 +69,16 @@ class _TasksBoxState extends State<TasksBox> {
               ],
             ),
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.0.h, horizontal: 8.w),
+              padding:  EdgeInsets.symmetric(horizontal: 8.0.w, vertical: 12.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    "Go to School",
-                    style: TextStyle(fontSize: 18.sp),
+                  Flexible(
+                    child: Text(
+                      "Go to School",
+                      style: TextStyle(fontSize: 18.sp),
+                    ),
                   ),
                   Text(
                     "2024/4/2",

@@ -38,9 +38,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           child: Column(
             children: [
               const TopInfo(),
-              Container(
+              SizedBox(
                 height: 15.h,
-                color: MyColors.backgroundColor,
               ),
               const CreditCard(),
               Row(
