@@ -39,7 +39,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     // bool modal = Provider.of<UserProvider>(context).setCourseId();
     bool modal = Provider.of<ModalProvider>(context).isActive;
-    print(modal);
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
       body: SafeArea(

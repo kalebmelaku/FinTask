@@ -2,7 +2,6 @@ import 'package:FinTask/includes/colors.dart';
 import 'package:FinTask/pages/credit.dart';
 import 'package:FinTask/pages/home.dart';
 import 'package:FinTask/state/modal_provider.dart';
-import 'package:FinTask/states/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';

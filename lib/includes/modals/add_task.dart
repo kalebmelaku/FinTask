@@ -2,7 +2,6 @@ import 'package:FinTask/includes/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class AddTask extends StatefulWidget {
   const AddTask({super.key});
