@@ -4,7 +4,9 @@ import 'package:FinTask/pages/login.dart';
 import 'package:FinTask/pages/profile.dart';
 import 'package:FinTask/pages/signup.dart';
 import 'package:FinTask/pages/welcome.dart';
-import 'package:FinTask/states/user_provider.dart';
+import 'package:FinTask/state/modal_provider.dart';
+import 'package:FinTask/state/user_provider.dart';
+// import 'package:FinTask/states/user_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,8 +23,17 @@ void main() async {
   if (isFirstRun) {
     pref.setBool('firstRun', false);
   }
-  runApp(ChangeNotifierProvider(
-    create: (context) => UserProvider(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => ModalProvider(),
+        lazy: true,
+      ),
+      ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+        lazy: true,
+      )
+    ],
     child: ScreenUtilInit(
       minTextAdapt: true,
       splitScreenMode: true,
@@ -33,7 +44,7 @@ void main() async {
         debugShowCheckedModeBanner: false,
         home: isFirstRun ? const Welcome() : const Welcome(),
         routes: {
-          '/homecontroller': (context) =>  Controller(),
+          '/homecontroller': (context) => Controller(),
           '/home': (context) => const Home(),
           '/login': (context) => const Login(),
           // '/otp': (context) => const OTP(),
