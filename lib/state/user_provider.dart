@@ -1,37 +1,29 @@
 import 'package:flutter/material.dart';
 
 class UserProvider extends ChangeNotifier {
-  // String _userId = "";
   // String _crsid = "";
-  // String _name = "";
-  // int _year = 0;
   // bool _isActive = false;
-  // String _email = "";
   // String _profilePic = "";
-  // String get userId => _userId;
   // String get crsid => _crsid;
-  // String get name => _name;
-  // int get year => _year;
-  // String get email => _email;
   // String get profilePic => _profilePic;
   // bool get isActive => _isActive;
+  String _userId = "";
+  String _name = "";
+  String _password = "";
+  String _email = "";
+  String get userId => _userId;
+  String get name => _name;
+  String get password => _password;
+  String get email => _email;
 
-  // void setUserId(String userId, String name, int year, String email, String profilePic) {
-  //   _userId = userId;
-  //   _name = name;
-  //   _year = year;
-  //   _email = email;
-  //   _profilePic = profilePic;
-  //   _isActive = isActive;
-  //   notifyListeners();
-  // }
-  // void setModalStatus(bool isActive) {
-  //   _isActive = isActive;
-  //   notifyListeners();
-  // }
+  void setUserId(
+      String userId, String name, String email, String password) {
+    _userId = userId;
+    _name = name;
+    _email = email;
+    _password = password;
+    notifyListeners();
+    // _profilePic = profilePic;
+  }
 
-  // void setCourseId(String crsid) {
-  //   _crsid = crsid;
-  //   notifyListeners();
-  // }
 }

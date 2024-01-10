@@ -1,8 +1,17 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
+
+import 'package:FinTask/includes/auth_service.dart';
 import 'package:FinTask/includes/colors.dart';
 import 'package:FinTask/includes/header.dart';
+import 'package:FinTask/includes/url.dart';
+import 'package:FinTask/state/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -16,6 +25,35 @@ class _LoginState extends State<Login> {
   final TextEditingController _password = TextEditingController();
   String? emailErr;
   String? passErr;
+  String? servErr;
+
+  validateInput() {
+    if (!RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(_email.text)) {
+      setState(() {
+        servErr = "";
+        passErr = "";
+        emailErr = "Invalid Email Address";
+      });
+    } else if (_password.text == "") {
+      setState(() {
+        servErr = "";
+        emailErr = "";
+        passErr = "Password is required";
+      });
+    } else {
+      setState(() {
+        passErr = "";
+        emailErr = "";
+      });
+      // Navigator.of(context)
+      //     .push(MaterialPageRoute(builder: (context) => const Home()));
+      // loginUser(_email.text, _password.text);
+      AuthService().login(context, _email.text, _password.text);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,9 +139,9 @@ class _LoginState extends State<Login> {
                             height: 35.h,
                             onPressed: () {
                               HapticFeedback.vibrate();
-                              Navigator.of(context)
-                                  .pushNamed("/homecontroller");
-                              // validateInput();
+                              // Navigator.of(context)
+                              //     .pushNamed("/homecontroller");
+                              validateInput();
                             },
                             color: MyColors.primaryColor,
                             elevation: 0,

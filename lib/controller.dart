@@ -1,4 +1,6 @@
+import 'package:FinTask/includes/auth_service.dart';
 import 'package:FinTask/includes/colors.dart';
+import 'package:FinTask/includes/functions/custom_function.dart';
 import 'package:FinTask/includes/modal.dart';
 import 'package:FinTask/pages/credit.dart';
 import 'package:FinTask/pages/home.dart';
@@ -18,7 +20,7 @@ class Controller extends StatefulWidget {
 
 class _ControllerState extends State<Controller> {
   int currentIndex = 0;
-
+  final authService = AuthService();
   void onItemTapped(int index) {
     setState(() {
       widget.selectedIndex = index;
@@ -29,8 +31,15 @@ class _ControllerState extends State<Controller> {
   @override
   void initState() {
     onItemTapped(widget.selectedIndex);
-// TODO: implement initState
+    getAuth();
     super.initState();
+  }
+
+  void getAuth() async {
+    final userData = await authService.getToken();
+    final userId = userData['userId'];
+
+    getUserInfo(context, userId);
   }
 
   final List<Widget> pages = [
@@ -73,12 +82,14 @@ class _ControllerState extends State<Controller> {
           setState(() {
             // modal.setModalStatus(!modal.isActive);
             showModalBottomSheet(
-              isScrollControlled: true,
+                isScrollControlled: true,
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 context: context,
                 builder: (BuildContext context) {
-                  return SizedBox( height: MediaQuery.of(context).size.height / 1.1, child: ListView(children: [const Modal()]));
+                  return SizedBox(
+                      height: MediaQuery.of(context).size.height / 1.1,
+                      child: ListView(children: const [Modal()]));
                 });
           });
         },

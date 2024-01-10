@@ -1,6 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:FinTask/includes/auth_service.dart';
 import 'package:FinTask/includes/colors.dart';
+import 'package:FinTask/state/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class TopInfo extends StatefulWidget {
   const TopInfo({super.key});
@@ -10,9 +15,17 @@ class TopInfo extends StatefulWidget {
 }
 
 class _TopInfoState extends State<TopInfo> {
+  late String userName;
+
+  @override
+  void initState() {
+    super.initState();
+    userName = '';
+  }
+
   @override
   Widget build(BuildContext context) {
-
+    userName = Provider.of<UserProvider>(context).name;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -37,7 +50,7 @@ class _TopInfoState extends State<TopInfo> {
                       fontSize: 18.sp),
                 ),
                 Text(
-                  "Name",
+                  userName.split(" ")[0],
                   style: TextStyle(color: Colors.white, fontSize: 20.sp),
                 ),
               ],
@@ -45,7 +58,12 @@ class _TopInfoState extends State<TopInfo> {
           ],
         ),
         IconButton(
-          onPressed: () => {},
+          onPressed: () async {
+            bool state = await AuthService().removeToken();
+            if (state) {
+              Navigator.pushReplacementNamed(context, "/login");
+            }
+          },
           icon: const Icon(
             Icons.exit_to_app,
             size: 30,
