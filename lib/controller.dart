@@ -1,4 +1,5 @@
 import 'package:FinTask/includes/colors.dart';
+import 'package:FinTask/includes/modal.dart';
 import 'package:FinTask/pages/credit.dart';
 import 'package:FinTask/pages/home.dart';
 import 'package:FinTask/state/modal_provider.dart';
@@ -51,6 +52,7 @@ class _ControllerState extends State<Controller> {
                 ? const Home()
                 : const Home();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: MyColors.backgroundColor,
       body: PageStorage(
         bucket: bucket,
@@ -69,7 +71,15 @@ class _ControllerState extends State<Controller> {
               ),
         onPressed: () {
           setState(() {
-            modal.setModalStatus(!modal.isActive);
+            // modal.setModalStatus(!modal.isActive);
+            showModalBottomSheet(
+              isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                context: context,
+                builder: (BuildContext context) {
+                  return SizedBox( height: MediaQuery.of(context).size.height / 1.1, child: ListView(children: [const Modal()]));
+                });
           });
         },
       ),

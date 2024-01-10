@@ -28,7 +28,6 @@ class _ModalState extends State<Modal> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print(tabController.index);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: SizedBox(
