@@ -1,17 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:convert';
 
 import 'package:FinTask/includes/auth_service.dart';
 import 'package:FinTask/includes/colors.dart';
 import 'package:FinTask/includes/header.dart';
-import 'package:FinTask/includes/url.dart';
-import 'package:FinTask/state/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});

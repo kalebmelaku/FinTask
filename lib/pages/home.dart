@@ -1,13 +1,19 @@
+import "dart:convert";
+
+import "package:FinTask/includes/auth_service.dart";
 import "package:FinTask/includes/colors.dart";
 import "package:FinTask/includes/credit_card.dart";
 import "package:FinTask/includes/expenses_box.dart";
 import "package:FinTask/includes/modal.dart";
-import "package:FinTask/includes/tasks_box.dart";
+import "package:FinTask/includes/task_box.dart";
 import "package:FinTask/includes/top_info.dart";
+import "package:FinTask/includes/url.dart";
 import "package:FinTask/state/modal_provider.dart";
+import "package:FinTask/state/user_provider.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:provider/provider.dart";
+import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -18,15 +24,35 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late TabController tabController;
-  bool tabs = true;
+  final AuthService authService = AuthService();
 
+  List<dynamic> tasks = [];
+  late String userId;
+  bool tabs = true;
   @override
   void initState() {
+    userId = '';
     tabController = TabController(length: 2, vsync: this);
-    // final modal = context.read<UserProvider>();
-    // user.setUserId(stdId, name, year, email, profilePicture);
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fetchTasks();
+    });
     super.initState();
+  }
+
+  Future<void> fetchTasks() async {
+    final userData = await authService.getToken();
+    print(userData);
+    final user = userData['userId'];
+    String uri = "${Url.url}/getTasks/$user";
+    final Uri url = Uri.parse(uri);
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      setState(() {
+        tasks = jsonDecode(response.body);
+      });
+    } else {
+      print(response.body);
+    }
   }
 
   @override
@@ -37,8 +63,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    // bool modal = Provider.of<UserProvider>(context).setCourseId();
     bool modal = Provider.of<ModalProvider>(context).isActive;
+    userId = Provider.of<UserProvider>(context).userId;
+
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
       body: SafeArea(
@@ -109,7 +136,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       ),
                     ],
                   ),
-                  tabs ? const TasksBox() : const ExpensesBox()
+                  tabs
+                      ? TaskBox(
+                          tasks: Future(() => tasks),
+                        )
+                      : const ExpensesBox()
                 ],
               ),
               modal

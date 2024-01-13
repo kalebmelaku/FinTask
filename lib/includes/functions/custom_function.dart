@@ -20,6 +20,7 @@ Future<void> getUserInfo(BuildContext context, userId) async {
     final String email = resData['result'][0]['email'];
     final String password = resData['result'][0]['password'];
 
+    // ignore: use_build_context_synchronously
     final user = context.read<UserProvider>();
     user.setUserId(userId, name, email, password);
   } else {
@@ -27,3 +28,5 @@ Future<void> getUserInfo(BuildContext context, userId) async {
   }
 
 }
+
+

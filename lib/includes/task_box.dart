@@ -2,55 +2,14 @@ import 'package:FinTask/includes/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import "package:FinTask/state/user_provider.dart";
-import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
-class TasksBox extends StatefulWidget {
-  final List<dynamic> tasks;
-  const TasksBox({super.key, required this.tasks});
-  
-  @override
-  State<TasksBox> createState() => _TasksBoxState();
-}
-
-class _TasksBoxState extends State<TasksBox> {
-  late List<dynamic> _tasks = [];
-  List<Widget> taskWidget = [];
-  late String userId;
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    userId = '';
-    _tasks = widget.tasks;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // fetchTasks();
-    });
-
-    super.initState();
-  }
-  
-
-  // Future<void> fetchTasks() async {
-  //   String uri = "${Url.url}/getTasks/$userId";
-  //   final Uri url = Uri.parse(uri);
-  //   final response = await http.get(url);
-  //   if (response.statusCode == 200) {
-  //     setState(() {
-  //       tasks = jsonDecode(response.body);
-  //       isLoading = false;
-  //     });
-  //   } else {
-  //     print(response.body);
-  //     isLoading = false;
-  //   }
-  // }
+class TaskBox extends StatelessWidget {
+  late Future<List<dynamic>> tasks;
+  TaskBox({super.key, required this.tasks});
 
   @override
   Widget build(BuildContext context) {
-    userId = Provider.of<UserProvider>(context).userId;
-    // final tasks = context.read<TasksBox>().tasks;
-    print(_tasks);
     return Expanded(
       child: Container(
         width: double.infinity,
@@ -62,30 +21,42 @@ class _TasksBoxState extends State<TasksBox> {
                 topRight: Radius.circular(15),
                 bottomLeft: Radius.circular(0),
                 bottomRight: Radius.circular(0))),
-        // child: (tasks.isEmpty)
-        //     ? Center(
-        //         child: Text(
-        //         "No Task Available",
-        //         style: TextStyle(fontSize: 18.sp),
-        //       ))
-        //     : ListView(
-        //         scrollDirection: Axis.vertical,
-        //         shrinkWrap: true,
-        //         children: [
-        //           ...(tasks).map((e) {
-        //             return CustomTile(
-        //               taskName: e['name'],
-        //               date: e['due_date'],
-        //             );
-        //           })
-        //         ],
-        //       ),
-        child: const Text("task"),
+        child: FutureBuilder(
+          future: tasks,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error:  ${snapshot.error}'),
+              );
+            } else {
+              List<dynamic> tasks = snapshot.data as List<dynamic>;
+              return ListView(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                children: [
+                  ...(tasks).map((e) {
+                    return CustomTile(
+                      taskName: e['name'],
+                      date: e['due_date'],
+                    );
+                  })
+                ],
+              );
+            }
+          },
+        ),
       ),
     );
   }
 
   Widget CustomTile({required taskName, required date}) {
+    DateTime dateTime = DateTime.parse(date);
+    String formattedDate = DateFormat("y-MM-DD").format(dateTime.toLocal());
+   
     return Column(
       children: [
         Container(
@@ -122,12 +93,12 @@ class _TasksBoxState extends State<TasksBox> {
                 children: [
                   Flexible(
                     child: Text(
-                      "Go to School",
+                      taskName,
                       style: TextStyle(fontSize: 18.sp),
                     ),
                   ),
                   Text(
-                    "2024/4/2",
+                    formattedDate,
                     style: TextStyle(fontSize: 18.sp),
                   ),
                 ],
@@ -140,5 +111,3 @@ class _TasksBoxState extends State<TasksBox> {
     );
   }
 }
-
-void doNothing(BuildContext context) {}
