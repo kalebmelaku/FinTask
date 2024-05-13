@@ -14,9 +14,10 @@ class TaskBox extends StatefulWidget {
 }
 
 class _TaskBoxState extends State<TaskBox> {
+   DateTime date = DateTime.now();
   @override
   Widget build(BuildContext context) {
-    DateTime date = DateTime.now();
+   
     return Expanded(
         child: Container(
             width: double.infinity,
@@ -34,43 +35,44 @@ class _TaskBoxState extends State<TaskBox> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(
-                    onPressed: () async {
-                      DateTime? newDate = await showDatePicker(
-                        context: context,
-                        initialDate: date,
-                        firstDate: DateTime(1990),
-                        lastDate: DateTime(2100),
-                      );
-                      if (newDate != null) {
-                        setState(() {
-                          date = newDate;
-                        });
-                      }
-                    },
-                    child: Text(
-                      '${date != null ? date.year : DateTime.now().year} - ${date != null ? date.month : DateTime.now().month} - ${date != null ? date.day : DateTime.now().day}',
-                      style: TextStyle(fontSize: 11.sp, color: Colors.white),
-                    ),
-                  ),
-      
-                     MaterialButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed("/homecontroller");
+                      onPressed: () async {
+                        DateTime? newDate = await showDatePicker(
+                          context: context,
+                          initialDate: date,
+                          firstDate: DateTime(1990),
+                          lastDate: DateTime(2100),
+                        );
+                        if (newDate != null) {
+                          setState(() {
+                            date = newDate;
+                            print(date);
+                          });
+                        }
                       },
-                      color: MyColors.primaryColor,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Text(
-                        'See More',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 11.sp,
-                          fontWeight: FontWeight.w400,
+                      child: Builder(
+                        builder: (context) => Text(
+                          DateFormat("y-MM-dd").format(date),
+                          style:
+                              TextStyle(fontSize: 11.sp, color: Colors.white),
                         ),
+                      )),
+                  MaterialButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed("/homecontroller");
+                    },
+                    color: MyColors.primaryColor,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      'See More',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 11.sp,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
-                  
+                  ),
                 ],
               ),
               SizedBox(height: 10.h),
