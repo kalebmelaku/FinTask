@@ -50,6 +50,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       setState(() {
         tasks = jsonDecode(response.body);
       });
+      
     } else {
       print(response.body);
     }

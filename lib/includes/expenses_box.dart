@@ -11,6 +11,8 @@ class ExpensesBox extends StatefulWidget {
 
 class _ExpensesBoxState extends State<ExpensesBox> {
   @override
+  DateTime date = DateTime.now();
+  @override
   Widget build(BuildContext context) {
     return Expanded(
         child: Container(
@@ -23,59 +25,107 @@ class _ExpensesBoxState extends State<ExpensesBox> {
               topRight: Radius.circular(0),
               bottomLeft: Radius.circular(0),
               bottomRight: Radius.circular(0))),
-      child: ListView(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
+      child: Column(
         children: [
-          ExpenseBox(
-            day: 7,
-            month: 'Jan',
-            category: "Personal",
-            reason: "Mobile Card",
-            amount: 100.00,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(
+                onPressed: () async {
+                  DateTime? newDate = await showDatePicker(
+                    context: context,
+                    initialDate: date,
+                    firstDate: DateTime(1990),
+                    lastDate: DateTime(2100),
+                  );
+                  if (newDate != null) {
+                    setState(() {
+                      date = newDate;
+                    });
+                  }
+                },
+                child: Text(
+                  '${DateTime.now().year} - ${DateTime.now().month} - ${DateTime.now().day}',
+                  style: TextStyle(fontSize: 15.sp, color: Colors.white),
+                ),
+              ),
+              MaterialButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed("/homecontroller");
+                },
+                color: MyColors.primaryColor,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                child: Text(
+                  'See More',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
           ),
-          SizedBox(
-            height: 10.h,
-          ),
-          ExpenseBox(
-            day: 9,
-            month: 'Dec',
-            category: "Office",
-            reason: "Printer",
-            amount: 10000.00,
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-          ExpenseBox(
-            day: 17,
-            month: 'Dec',
-            category: "Home",
-            reason: "Fruits",
-            amount: 500.00,
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-          ExpenseBox(
-            day: 7,
-            month: 'Jan',
-            category: "Personal",
-            reason: "Mobile Card",
-            amount: 100.00,
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-          ExpenseBox(
-            day: 7,
-            month: 'Jan',
-            category: "Personal",
-            reason: "Mobile Card",
-            amount: 100.00,
-          ),
-          SizedBox(
-            height: 10.h,
+          Expanded(
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              children: [
+                 SizedBox(height: 10.h),
+                ExpenseBox(
+                  day: 7,
+                  month: 'Jan',
+                  category: "Personal",
+                  reason: "Mobile Card",
+                  amount: 100.00,
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                ExpenseBox(
+                  day: 9,
+                  month: 'Dec',
+                  category: "Office",
+                  reason: "Printer",
+                  amount: 10000.00,
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                ExpenseBox(
+                  day: 17,
+                  month: 'Dec',
+                  category: "Home",
+                  reason: "Fruits",
+                  amount: 500.00,
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                ExpenseBox(
+                  day: 7,
+                  month: 'Jan',
+                  category: "Personal",
+                  reason: "Mobile Card",
+                  amount: 100.00,
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                ExpenseBox(
+                  day: 7,
+                  month: 'Jan',
+                  category: "Personal",
+                  reason: "Mobile Card",
+                  amount: 100.00,
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+              ],
+            ),
           ),
         ],
       ),
