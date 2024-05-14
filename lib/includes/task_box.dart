@@ -17,7 +17,6 @@ class _TaskBoxState extends State<TaskBox> {
   TextEditingController dateController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    DateTime date = DateTime.now();
     return Expanded(
       child: Container(
         width: double.infinity,

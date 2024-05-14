@@ -10,6 +10,7 @@ class ExpensesBox extends StatefulWidget {
 }
 
 class _ExpensesBoxState extends State<ExpensesBox> {
+    TextEditingController dateController = TextEditingController();
   @override
   DateTime date = DateTime.now();
   @override
@@ -30,25 +31,27 @@ class _ExpensesBoxState extends State<ExpensesBox> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TextButton(
-                onPressed: () async {
-                  DateTime? newDate = await showDatePicker(
-                    context: context,
-                    initialDate: date,
-                    firstDate: DateTime(1990),
-                    lastDate: DateTime(2100),
-                  );
-                  if (newDate != null) {
-                    setState(() {
-                      date = newDate;
-                    });
-                  }
-                },
-                child: Text(
-                  '${DateTime.now().year} - ${DateTime.now().month} - ${DateTime.now().day}',
-                  style: TextStyle(fontSize: 15.sp, color: Colors.white),
+               Expanded(
+                  child: TextField(
+                    controller: dateController,
+                    decoration: const InputDecoration(
+                        floatingLabelStyle: null,
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        labelText: 'Select Date',
+                        labelStyle: TextStyle(color: Colors.white),
+                        focusColor: Colors.transparent,
+                        prefixIcon: Icon(
+                          Icons.calendar_today,
+                          color: Colors.white,
+                        ),
+                        enabledBorder:
+                            OutlineInputBorder(borderSide: BorderSide.none),
+                        focusedBorder:
+                            OutlineInputBorder(borderSide: BorderSide.none)),
+                    readOnly: true,
+                    onTap: _selectDate,
+                  ),
                 ),
-              ),
               MaterialButton(
                 onPressed: () {
                   Navigator.of(context).pushNamed("/homecontroller");
@@ -203,5 +206,19 @@ class _ExpensesBoxState extends State<ExpensesBox> {
         ],
       ),
     );
+  }
+
+    Future<void> _selectDate() async {
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      setState(() {
+        dateController.text = picked.toString().split(" ")[0];
+      });
+    }
   }
 }
