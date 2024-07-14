@@ -89,9 +89,7 @@ class _TasksBoxState extends State<TasksBox> {
             "No Task Available",
             style: TextStyle(fontSize: 18.sp),
           ))
-        : ListView(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
+        : Column(
             children: [
               ...(widget.tasks).map((e) {
                 return customTile(

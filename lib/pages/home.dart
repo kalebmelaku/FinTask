@@ -101,9 +101,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               ),
                             ),
                           ]),
-                      Column(
-                        children: [TasksBox(tasks: tasks)],
-                      )
+                      TasksBox(tasks: tasks)
                     ],
                   ),
                 ),
