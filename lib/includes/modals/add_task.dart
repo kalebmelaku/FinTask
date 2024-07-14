@@ -6,7 +6,6 @@ import 'package:FinTask/includes/url.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 class AddTask extends StatefulWidget {
