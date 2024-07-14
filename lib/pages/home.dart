@@ -3,6 +3,7 @@ import "dart:convert";
 import "package:FinTask/includes/auth_service.dart";
 import "package:FinTask/includes/colors.dart";
 import "package:FinTask/includes/credit_card.dart";
+import "package:FinTask/includes/expense_box.dart";
 import "package:FinTask/includes/options.dart";
 import "package:FinTask/includes/tasks_box.dart";
 import "package:FinTask/includes/top_info.dart";
@@ -26,6 +27,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   final AuthService authService = AuthService();
 
   List<dynamic> tasks = [];
+  List<dynamic> expenses = [];
   late String userId;
   bool tabs = true;
   @override
@@ -34,6 +36,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     tabController = TabController(length: 2, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetchTasks();
+      fetchExpenses();
     });
     super.initState();
   }
@@ -48,6 +51,22 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       final responseJson = jsonDecode(response.body);
       setState(() {
         tasks = responseJson['tasks'];
+      });
+    } else {
+      // print(response.body);
+    }
+  }
+
+  Future<void> fetchExpenses() async {
+    final userData = await authService.getToken();
+    final user = userData['userId'];
+    String uri = "${Url.url}/expense/$user";
+    final Uri url = Uri.parse(uri);
+    final response = await http.get(url);
+    if (response.statusCode == 201) {
+      final responseJson = jsonDecode(response.body);
+      setState(() {
+        expenses = responseJson['result'];
       });
     } else {
       // print(response.body);
@@ -89,7 +108,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "Upcoming Tasks",
+                              "Today's Tasks",
                               style: TextStyle(fontSize: 15.sp),
                             ),
                             TextButton(
@@ -101,7 +120,37 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               ),
                             ),
                           ]),
-                      TasksBox(tasks: tasks)
+                      (tasks.isEmpty)
+                          ? const Center(
+                              child: Text("No Tasks Available for today"),
+                            )
+                          : TasksBox(tasks: tasks),
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Today's Expenses",
+                            style: TextStyle(fontSize: 15.sp),
+                          ),
+                          TextButton(
+                            onPressed: () => {print("more")},
+                            child: Text(
+                              "See All",
+                              style: TextStyle(
+                                  fontSize: 15.sp, color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                      (expenses.isEmpty)
+                          ? const Center(
+                              child: Text("No Expenses Available for today"),
+                            )
+                          : ExpenseBox(expenses: expenses),
                     ],
                   ),
                 ),

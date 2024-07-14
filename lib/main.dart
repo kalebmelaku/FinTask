@@ -5,6 +5,7 @@ import 'package:FinTask/pages/deposit.dart';
 import 'package:FinTask/pages/home.dart';
 import 'package:FinTask/pages/login.dart';
 import 'package:FinTask/pages/partners.dart';
+import 'package:FinTask/pages/payCredit.dart';
 import 'package:FinTask/pages/profile.dart';
 import 'package:FinTask/pages/signup.dart';
 import 'package:FinTask/pages/welcome.dart';
@@ -73,6 +74,7 @@ void main() async {
           '/deposit': (context) => const Deposit(),
           '/partners': (context) => const Partners(),
           '/expenseOpt': (context) => const ExpenseOptions(),
+          '/payCredit': (context) => const PayCredit(),
           // '/otp': (context) => const OTP(),
           '/signup': (context) => const SignUp(),
           // '/chat': (context) => const Chat(),
