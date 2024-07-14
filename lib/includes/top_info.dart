@@ -47,11 +47,11 @@ class _TopInfoState extends State<TopInfo> {
                   'Welcome',
                   style: TextStyle(
                       color: const Color.fromARGB(255, 151, 151, 151),
-                      fontSize: 18.sp),
+                      fontSize: 15.sp),
                 ),
                 Text(
                   userName.split(" ")[0],
-                  style: TextStyle(color: Colors.white, fontSize: 20.sp),
+                  style: TextStyle(color: Colors.white, fontSize: 18.sp),
                 ),
               ],
             )
