@@ -13,6 +13,7 @@ import "package:FinTask/state/modal_provider.dart";
 import "package:FinTask/state/user_provider.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:logger/logger.dart";
 import "package:provider/provider.dart";
 import 'package:http/http.dart' as http;
 
@@ -24,6 +25,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+   var logger = Logger();
   late TabController tabController;
   final AuthService authService = AuthService();
 
@@ -52,7 +54,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         tasks = jsonDecode(response.body);
       });
     } else {
-      print(response.body);
+      logger.e(response.body);
     }
   }
 
@@ -80,7 +82,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     height: 15.h,
                   ),
                   const CreditCard(),
-                  const Options(),    
+                  const Options(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,

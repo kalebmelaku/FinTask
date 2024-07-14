@@ -29,6 +29,7 @@ dependencies:
   flutter_slidable: ^3.0.1
   syncfusion_flutter_datepicker: ^24.1.45
   iconify_flutter: ^0.0.5
+  logger: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

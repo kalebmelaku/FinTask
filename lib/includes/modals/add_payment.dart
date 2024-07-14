@@ -1,7 +1,13 @@
 import 'package:FinTask/includes/colors.dart';
+import 'package:FinTask/state/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:convert';
+import 'package:FinTask/includes/url.dart';
+import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 
 class AddPayment extends StatefulWidget {
   const AddPayment({super.key});
@@ -11,9 +17,60 @@ class AddPayment extends StatefulWidget {
 }
 
 class _AddPaymentState extends State<AddPayment> {
+   var logger = Logger();
   String selectedOption = 'Personal';
+  late String userId;
+  String? selectedReason;
+  List<dynamic> reasons = [];
+  final TextEditingController amount = TextEditingController();
+  final TextEditingController note = TextEditingController();
+  @override
+  void initState() {
+    userId = '';
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fetchExpenseOptions();
+    });
+  }
+
+  Future<void> fetchExpenseOptions() async {
+    String uri = "${Url.url}/expense/options/$userId";
+    final Uri url = Uri.parse(uri);
+    final response = await http.get(url);
+    if (response.statusCode == 201) {
+      final responseJson = jsonDecode(response.body);
+      setState(() {
+        reasons = responseJson['result'];
+      });
+    } else {
+      // print(response.body);
+    }
+  }
+
+  Future<Map<String, dynamic>> addExpense() async {
+    final Map<String, dynamic> data = {
+      'owner_id': userId,
+      'reason': selectedReason,
+      'amount': amount.text,
+      'note': note.text
+    };
+    final String baseUrl = '${Url.url}/expense';
+    final Uri url = Uri.parse(baseUrl);
+    final response = await http.post(url,
+        headers: {'Content-Type': 'application/json'}, body: jsonEncode(data));
+    final responseData = json.decode(response.body);
+    if (response.statusCode == 201) {
+      Navigator.pushReplacementNamed(context, "/homecontroller");
+    } else {
+      logger.e(response.body);
+    }
+
+    return responseData;
+  }
+
   @override
   Widget build(BuildContext context) {
+    userId = Provider.of<UserProvider>(context).userId;
     return Container(
       decoration: BoxDecoration(
           color: MyColors.primaryColorBg,
@@ -23,116 +80,69 @@ class _AddPaymentState extends State<AddPayment> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(
               height: 10.h,
             ),
             makeInput(
               label: "Amount", keyType: TextInputType.number,
-              // controller: _email,
+              controller: amount,
               // error: emailErr,
             ),
             SizedBox(
               height: 10.h,
             ),
             makeInput(
-              label: "Reason",
+              label: "Note",
               keyType: TextInputType.text,
-              // controller: _password,
+              controller: note,
               // error: passErr,
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: ListTileTheme(
-                    horizontalTitleGap: 0,
-                    child: RadioListTile(
-                                    
-                      contentPadding: const EdgeInsets.all(0),
-                      fillColor: WidgetStateProperty.all(Colors.white),
-                      title: const Text(
-                        'Personal',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      value: 'personal',
-                      groupValue: selectedOption,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedOption = value.toString();
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: ListTileTheme(
-                    horizontalTitleGap: 0,
-                    child: RadioListTile(
-                      contentPadding: const EdgeInsets.all(0),
-                      fillColor: WidgetStateProperty.all(Colors.white),
-                      title: const Text(
-                        'Home',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      value: 'home',
-                      groupValue: selectedOption,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedOption = value.toString();
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ],
+            SizedBox(
+              height: 15.h,
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: ListTileTheme(
-                    horizontalTitleGap: 0,
-                    child: RadioListTile(
-                      contentPadding: const EdgeInsets.all(0),
-                      fillColor: WidgetStateProperty.all(Colors.white),
-                      title: const Text(
-                        'Office',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      value: 'office',
-                      groupValue: selectedOption,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedOption = value.toString();
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: ListTileTheme(
-                    horizontalTitleGap: 0,
-                    child: RadioListTile(
-                      contentPadding: const EdgeInsets.all(0),
-                      fillColor: WidgetStateProperty.all(Colors.white),
-                      title: const Text(
-                        'Other',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      value: 'other',
-                      groupValue: selectedOption,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedOption = value.toString();
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ],
+            Text(
+              "Select Reason",
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w400,
+              ),
             ),
-            // Row(
-            //   children: [makeRadio(title: "Personal", value: "Personal")],
-            // ),
+            DropdownButton(
+              isExpanded: true,
+              // isDense: true,
+              selectedItemBuilder: (BuildContext context) {
+                return reasons.map<Widget>((partner) {
+                  return Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      partner['name'],
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  );
+                }).toList();
+              },
+              items: reasons.map((partner) {
+                return DropdownMenuItem<String>(
+                  value: partner['id']
+                      .toString(), // Assuming 'id' is a string or can be converted to a string
+                  child: Text(
+                    partner[
+                        'name'], // Adjust this according to your data structure
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                );
+              }).toList(),
+              hint: const Text('Select Reason'),
+              value: selectedReason,
+              style: const TextStyle(color: Colors.white),
+              onChanged: (newValue) {
+                setState(() {
+                  selectedReason = newValue;
+                });
+              },
+            ),
             SizedBox(
               height: 10.h,
             ),
@@ -153,6 +163,7 @@ class _AddPaymentState extends State<AddPayment> {
                   height: 35.h,
                   onPressed: () {
                     HapticFeedback.vibrate();
+                    addExpense().then((data) => print(data));
                     // Navigator.of(context).pushNamed("/homecontroller");
                     // validateInput();
                   },
@@ -176,7 +187,7 @@ class _AddPaymentState extends State<AddPayment> {
     );
   }
 
-  Widget makeInput({label, keyType}) {
+  Widget makeInput({label, keyType, controller}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -192,6 +203,7 @@ class _AddPaymentState extends State<AddPayment> {
         ),
         TextField(
           keyboardType: keyType,
+          controller: controller,
           decoration: InputDecoration(
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
@@ -205,27 +217,6 @@ class _AddPaymentState extends State<AddPayment> {
           ),
         )
       ],
-    );
-  }
-
-  Widget makeRadio({title, value}) {
-    return Container(
-      color: Colors.amber,
-      height: 100,
-      child: RadioListTile(
-        title: const Text(
-          'Personal',
-          style: TextStyle(color: Colors.white),
-        ),
-        value: 'personal',
-        activeColor: Colors.white,
-        groupValue: selectedOption,
-        onChanged: (value) {
-          setState(() {
-            selectedOption = value.toString();
-          });
-        },
-      ),
     );
   }
 }

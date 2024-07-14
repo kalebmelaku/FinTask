@@ -4,8 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OptionsBox extends StatelessWidget {
   final String title;
+  final String url;
   final Widget icon;
-  const OptionsBox({super.key, required this.title, required this.icon});
+  const OptionsBox({super.key, required this.title, required this.icon, required this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class OptionsBox extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () => {
-            Navigator.of(context).pushNamed("/$title")
+            Navigator.of(context).pushNamed("/$url")
           },
           child: Container(
             padding: EdgeInsets.all(10.h),

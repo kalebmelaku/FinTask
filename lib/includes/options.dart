@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/fa_solid.dart';
+import 'package:iconify_flutter/icons/material_symbols.dart';
 import 'package:iconify_flutter/icons/mdi.dart';
 import 'package:iconify_flutter/icons/vaadin.dart';
 
@@ -24,6 +25,7 @@ class _OptionsState extends State<Options> {
         children: [
           OptionsBox(
             title: 'Deposit',
+            url: 'deposit',
             icon: Iconify(
               Vaadin.money_deposit,
               color: Colors.white,
@@ -32,22 +34,25 @@ class _OptionsState extends State<Options> {
           ),
           // OptionsBox(
           //   title: 'Credit',
+          // url: 'expenseOpt',
           //   icon: Iconify(
           //     Mdi.account_credit_card,
           //     color: Colors.white,
           //     size: 30,
           //   ),
           // ),
-          // OptionsBox(
-          //   title: 'Expense',
-          //   icon: Iconify(
-          //     MaterialSymbols.fact_check,
-          //     color: Colors.white,
-          //     size: 30,
-          //   ),
-          // ),
+          OptionsBox(
+            title: 'Expense Opt',
+            url: 'expenseOpt',
+            icon: Iconify(
+              MaterialSymbols.fact_check,
+              color: Colors.white,
+              size: 30,
+            ),
+          ),
           OptionsBox(
             title: 'Pay Credit',
+            url: 'payCredit',
             icon: Iconify(
               Mdi.account_check,
               color: Colors.white,
@@ -56,6 +61,7 @@ class _OptionsState extends State<Options> {
           ),
           OptionsBox(
             title: 'Partners',
+            url: 'partners',
             icon: Iconify(
               FaSolid.user_friends,
               color: Colors.white,

@@ -6,6 +6,7 @@ import 'package:FinTask/state/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:FinTask/includes/url.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +20,7 @@ class Deposit extends StatefulWidget {
 }
 
 class _DepositState extends State<Deposit> {
+   var logger = Logger();
   late String userId;
   final TextEditingController _amount = TextEditingController();
   @override
@@ -42,7 +44,7 @@ class _DepositState extends State<Deposit> {
       // Navigator.pushReplacementNamed(context, "/homecontroller");
       Navigator.pushNamed(context, "/homecontroller");
     } else {
-      print(response.body);
+      logger.e(response.body);
     }
 
     return responseData;

@@ -5,9 +5,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:FinTask/includes/url.dart';
 import 'package:FinTask/state/user_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
-
 
 class CreditCard extends StatefulWidget {
   const CreditCard({super.key});
@@ -17,6 +17,7 @@ class CreditCard extends StatefulWidget {
 }
 
 class _CreditCardState extends State<CreditCard> {
+   var logger = Logger();
   int deposit = 0;
   @override
   void initState() {
@@ -38,7 +39,7 @@ class _CreditCardState extends State<CreditCard> {
         deposit = responseData['depositAmount'];
       });
     } else {
-      print(response.body);
+      logger.e(response.body);
     }
   }
 

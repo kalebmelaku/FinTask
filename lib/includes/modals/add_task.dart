@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 
 class AddTask extends StatefulWidget {
   const AddTask({super.key});
@@ -16,6 +17,7 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
+   var logger = Logger();
   final AuthService authService = AuthService();
   final TextEditingController _name = TextEditingController();
   final TextEditingController _password = TextEditingController();
@@ -51,7 +53,7 @@ class _AddTaskState extends State<AddTask> {
         // isLoading = false;
       });
     } else {
-      print(response.body);
+      logger.e(response.body);
     }
   }
 

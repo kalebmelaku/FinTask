@@ -13,37 +13,38 @@ import 'package:FinTask/includes/url.dart';
 import 'package:http/http.dart' as http;
 import '../includes/header.dart';
 
-class Partners extends StatefulWidget {
-  const Partners({super.key});
+class ExpenseOptions extends StatefulWidget {
+  const ExpenseOptions({super.key});
 
   @override
-  State<Partners> createState() => _PartnersState();
+  State<ExpenseOptions> createState() => _ExpenseOptionsState();
 }
 
-class _PartnersState extends State<Partners> {
-  var logger = Logger();
+class _ExpenseOptionsState extends State<ExpenseOptions> {
   late String userId;
   final TextEditingController _name = TextEditingController();
   List<dynamic> partners = [];
+  var logger = Logger();
   @override
   void initState() {
     userId = '';
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      fetchPartner();
+      fetchExpenseOption();
     });
   }
 
-  Future<Map<String, dynamic>> addPartner() async {
+  Future<Map<String, dynamic>> addOption() async {
     final Map<String, dynamic> data = {'owner_id': userId, 'name': _name.text};
-    final String baseUrl = '${Url.url}/partner';
+    final String baseUrl = '${Url.url}/expense/options';
     final Uri url = Uri.parse(baseUrl);
     final response = await http.post(url,
         headers: {'Content-Type': 'application/json'}, body: jsonEncode(data));
     final responseData = json.decode(response.body);
     if (response.statusCode == 201) {
+      logger.i("message received");
       // final resData = jsonDecode(response.body);
-      Navigator.pushReplacementNamed(context, "/partners");
+      Navigator.pushReplacementNamed(context, "/expenseOpt");
       // Navigator.pushNamed(context, "/partners");
     } else {
       logger.e(response.body);
@@ -52,27 +53,27 @@ class _PartnersState extends State<Partners> {
     return responseData;
   }
 
-  Future<void> fetchPartner() async {
-    String uri = "${Url.url}/partner/$userId";
+  Future<void> fetchExpenseOption() async {
+    String uri = "${Url.url}/expense/options/$userId";
     final Uri url = Uri.parse(uri);
     final response = await http.get(url);
     if (response.statusCode == 201) {
       final responseJson = jsonDecode(response.body);
       setState(() {
-        partners = responseJson['tasks'];
+        partners = responseJson['result'];
       });
     } else {
       // print(response.body);
     }
   }
 
-  Future<void> deletePartner(taskId) async {
+  Future<void> deleteOption(taskId) async {
     // final Map<String, dynamic> data = {'taskId': taskId, 'userId': userId};
-    String uri = "${Url.url}/partner/$taskId";
+    String uri = "${Url.url}/expense/options/$taskId";
     final Uri url = Uri.parse(uri);
     final response = await http.delete(url);
     if (response.statusCode == 201) {
-      Navigator.pushReplacementNamed(context, "/partners");
+      Navigator.pushReplacementNamed(context, "/expenseOpt");
     } else {
       logger.e(response.body);
     }
@@ -91,7 +92,8 @@ class _PartnersState extends State<Partners> {
               children: [
                 const TopInfo(),
                 const Header(
-                    pageName: "Partners", pageDesc: "Add Credit Partner"),
+                    pageName: "Expense Reasons",
+                    pageDesc: "Add Expense Reason"),
                 SizedBox(
                   height: 25.h,
                 ),
@@ -136,7 +138,7 @@ class _PartnersState extends State<Partners> {
                       height: 35.h,
                       onPressed: () {
                         HapticFeedback.vibrate();
-                        addPartner();
+                        addOption();
                         // Navigator.of(context)
                         //     .pushNamed("/homecontroller");
                       },
@@ -145,7 +147,7 @@ class _PartnersState extends State<Partners> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15)),
                       child: Text(
-                        "Add Partner",
+                        "Add Reason",
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 20.sp,
@@ -158,7 +160,7 @@ class _PartnersState extends State<Partners> {
                   height: 25.h,
                 ),
                 Text(
-                  "Partners",
+                  "Reasons",
                   style: TextStyle(fontSize: 16.sp),
                 ),
                 SizedBox(
@@ -166,7 +168,7 @@ class _PartnersState extends State<Partners> {
                 ),
                 (partners.isEmpty
                     ? const Center(
-                        child: Text("No Partners Available"),
+                        child: Text("No Expense Reason Available"),
                       )
                     : Column(
                         children: [
@@ -197,7 +199,7 @@ class _PartnersState extends State<Partners> {
               motion: const StretchMotion(),
               children: [
                 SlidableAction(
-                  onPressed: (context) => {deletePartner(partId)},
+                  onPressed: (context) => {deleteOption(partId)},
                   icon: Icons.delete,
                   backgroundColor: Colors.red,
                 )

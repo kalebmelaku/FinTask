@@ -4,6 +4,7 @@ import 'package:FinTask/includes/url.dart';
 import 'package:FinTask/state/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
 
@@ -12,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthService {
   static final String baseUrl = '${Url.url}/login';
   final Uri url = Uri.parse(baseUrl);
-
+  var logger = Logger();
   Future<void> storeToken(String token, String userId) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', token);
@@ -52,7 +53,7 @@ class AuthService {
       // Navigator.pushReplacementNamed(context, "/homecontroller");
       Navigator.pushNamed(context, "/homecontroller");
     } else {
-      print(response.body);
+      logger.e(response.body);
     }
 
     return responseData;

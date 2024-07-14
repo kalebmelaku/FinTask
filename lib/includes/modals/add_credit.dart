@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:convert';
 import 'package:FinTask/includes/url.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class AddCredit extends StatefulWidget {
@@ -16,6 +17,7 @@ class AddCredit extends StatefulWidget {
 }
 
 class _AddCreditState extends State<AddCredit> {
+  var logger = Logger();
   late String userId;
   String? selectedPartner;
   List<dynamic> partners = [];
@@ -57,7 +59,7 @@ class _AddCreditState extends State<AddCredit> {
     if (response.statusCode == 201) {
       Navigator.pushReplacementNamed(context, "/homecontroller");
     } else {
-      print(response.body);
+      logger.e(response.body);
     }
 
     return responseData;
