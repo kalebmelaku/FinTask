@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:FinTask/includes/url.dart';
 import 'package:FinTask/state/user_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
@@ -17,12 +18,15 @@ class CreditCard extends StatefulWidget {
 }
 
 class _CreditCardState extends State<CreditCard> {
-   var logger = Logger();
+  final formatCurrency = NumberFormat.currency(symbol: '\$', decimalDigits: 0);
+  var logger = Logger();
   int deposit = 0;
+  int credit = 0;
   @override
   void initState() {
     super.initState();
     getDeposit();
+    getCredit();
     WidgetsBinding.instance.addPostFrameCallback((_) {});
   }
 
@@ -35,8 +39,26 @@ class _CreditCardState extends State<CreditCard> {
         await http.get(url, headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 201) {
       final responseData = jsonDecode(response.body);
+      logger.i(responseData);
       setState(() {
         deposit = responseData['depositAmount'];
+      });
+    } else {
+      logger.e(response.body);
+    }
+  }
+
+  Future<void> getCredit() async {
+    final user = context.read<UserProvider>();
+    final userId = user.userId;
+    String uri = "${Url.url}/credit/total/$userId";
+    final Uri url = Uri.parse(uri);
+    final response =
+        await http.get(url, headers: {'Content-Type': 'application/json'});
+    if (response.statusCode == 201) {
+      final responseData = jsonDecode(response.body);
+      setState(() {
+        credit = responseData['resultTotal']['creditTotal'];
       });
     } else {
       logger.e(response.body);
@@ -142,7 +164,7 @@ class _CreditCardState extends State<CreditCard> {
                                   height: 5.h,
                                 ),
                                 Text(
-                                  deposit.toString(),
+                                  formatCurrency.format(deposit),
                                   style: TextStyle(fontSize: 20.sp),
                                 ),
                               ],
@@ -171,7 +193,7 @@ class _CreditCardState extends State<CreditCard> {
                                   height: 5.h,
                                 ),
                                 Text(
-                                  "100, 000",
+                                  formatCurrency.format(credit),
                                   style: TextStyle(fontSize: 20.sp),
                                 ),
                               ],
