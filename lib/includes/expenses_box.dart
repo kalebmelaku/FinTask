@@ -10,8 +10,7 @@ class ExpensesBox extends StatefulWidget {
 }
 
 class _ExpensesBoxState extends State<ExpensesBox> {
-    TextEditingController dateController = TextEditingController();
-  @override
+  TextEditingController dateController = TextEditingController();
   DateTime date = DateTime.now();
   @override
   Widget build(BuildContext context) {
@@ -31,27 +30,27 @@ class _ExpensesBoxState extends State<ExpensesBox> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-               Expanded(
-                  child: TextField(
-                    controller: dateController,
-                    decoration: const InputDecoration(
-                        floatingLabelStyle: null,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        labelText: 'Select Date',
-                        labelStyle: TextStyle(color: Colors.white),
-                        focusColor: Colors.transparent,
-                        prefixIcon: Icon(
-                          Icons.calendar_today,
-                          color: Colors.white,
-                        ),
-                        enabledBorder:
-                            OutlineInputBorder(borderSide: BorderSide.none),
-                        focusedBorder:
-                            OutlineInputBorder(borderSide: BorderSide.none)),
-                    readOnly: true,
-                    onTap: _selectDate,
-                  ),
+              Expanded(
+                child: TextField(
+                  controller: dateController,
+                  decoration: const InputDecoration(
+                      floatingLabelStyle: null,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      labelText: 'Select Date',
+                      labelStyle: TextStyle(color: Colors.white),
+                      focusColor: Colors.transparent,
+                      prefixIcon: Icon(
+                        Icons.calendar_today,
+                        color: Colors.white,
+                      ),
+                      enabledBorder:
+                          OutlineInputBorder(borderSide: BorderSide.none),
+                      focusedBorder:
+                          OutlineInputBorder(borderSide: BorderSide.none)),
+                  readOnly: true,
+                  onTap: _selectDate,
                 ),
+              ),
               MaterialButton(
                 onPressed: () {
                   Navigator.of(context).pushNamed("/homecontroller");
@@ -76,7 +75,7 @@ class _ExpensesBoxState extends State<ExpensesBox> {
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               children: [
-                 SizedBox(height: 10.h),
+                SizedBox(height: 10.h),
                 ExpenseBox(
                   day: 7,
                   month: 'Jan',
@@ -208,7 +207,7 @@ class _ExpensesBoxState extends State<ExpensesBox> {
     );
   }
 
-    Future<void> _selectDate() async {
+  Future<void> _selectDate() async {
     DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),

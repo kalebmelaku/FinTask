@@ -40,8 +40,7 @@ class _PartnersState extends State<Partners> {
         headers: {'Content-Type': 'application/json'}, body: jsonEncode(data));
     final responseData = json.decode(response.body);
     if (response.statusCode == 201) {
-      final resData = jsonDecode(response.body);
-
+      // final resData = jsonDecode(response.body);
       Navigator.pushReplacementNamed(context, "/Partners");
       // Navigator.pushNamed(context, "/Partners");
     } else {

@@ -21,7 +21,6 @@ class Deposit extends StatefulWidget {
 class _DepositState extends State<Deposit> {
   late String userId;
   final TextEditingController _amount = TextEditingController();
-  final TextEditingController _password = TextEditingController();
   @override
   void initState() {
     userId = '';
@@ -39,8 +38,7 @@ class _DepositState extends State<Deposit> {
         headers: {'Content-Type': 'application/json'}, body: jsonEncode(data));
     final responseData = json.decode(response.body);
     if (response.statusCode == 201) {
-      final resData = jsonDecode(response.body);
-
+      // final resData = jsonDecode(response.body);
       // Navigator.pushReplacementNamed(context, "/homecontroller");
       Navigator.pushNamed(context, "/homecontroller");
     } else {
