@@ -16,7 +16,7 @@ class _WelcomeState extends State<Welcome> {
   final introKey = GlobalKey<IntroductionScreenState>();
 
   void _onIntroEnd(context) {
-    Navigator.of(context).pushNamed("/signup");
+    Navigator.of(context).pushNamed("/login");
   }
 
   Widget _buildImage(String assetName, [double width = 350]) {

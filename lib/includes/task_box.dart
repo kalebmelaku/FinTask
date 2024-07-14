@@ -17,97 +17,95 @@ class _TaskBoxState extends State<TaskBox> {
   TextEditingController dateController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-            color: MyColors.tertiaryColor,
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(0),
-                topRight: Radius.circular(15),
-                bottomLeft: Radius.circular(0),
-                bottomRight: Radius.circular(0))),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: dateController,
-                    decoration: const InputDecoration(
-                        floatingLabelStyle: null,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        labelText: 'Select Date',
-                        labelStyle: TextStyle(color: Colors.white),
-                        focusColor: Colors.transparent,
-                        prefixIcon: Icon(
-                          Icons.calendar_today,
-                          color: Colors.white,
-                        ),
-                        enabledBorder:
-                            OutlineInputBorder(borderSide: BorderSide.none),
-                        focusedBorder:
-                            OutlineInputBorder(borderSide: BorderSide.none)),
-                    readOnly: true,
-                    onTap: _selectDate,
-                  ),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+          color: MyColors.tertiaryColor,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(0),
+              topRight: Radius.circular(15),
+              bottomLeft: Radius.circular(0),
+              bottomRight: Radius.circular(0))),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: dateController,
+                  decoration: const InputDecoration(
+                      floatingLabelStyle: null,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      labelText: 'Select Date',
+                      labelStyle: TextStyle(color: Colors.white),
+                      focusColor: Colors.transparent,
+                      prefixIcon: Icon(
+                        Icons.calendar_today,
+                        color: Colors.white,
+                      ),
+                      enabledBorder:
+                          OutlineInputBorder(borderSide: BorderSide.none),
+                      focusedBorder:
+                          OutlineInputBorder(borderSide: BorderSide.none)),
+                  readOnly: true,
+                  onTap: _selectDate,
                 ),
-                
-                MaterialButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed("/homecontroller");
-                  },
-                  color: MyColors.primaryColor,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Text(
-                    'See More',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 10.h),
-            Expanded(
-              child: FutureBuilder(
-                future: widget.tasks,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text('Error:  ${snapshot.error}'),
-                    );
-                  } else {
-                    List<dynamic> tasks = snapshot.data as List<dynamic>;
-                    return ListView(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      children: [
-                        ...(tasks).map((e) {
-                          return CustomTile(
-                            taskName: e['name'],
-                            date: e['due_date'],
-                          );
-                        })
-                      ],
-                    );
-                  }
-                },
               ),
+              
+              MaterialButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed("/homecontroller");
+                },
+                color: MyColors.primaryColor,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                child: Text(
+                  'See More',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10.h),
+          Expanded(
+            child: FutureBuilder(
+              future: widget.tasks,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error:  ${snapshot.error}'),
+                  );
+                } else {
+                  List<dynamic> tasks = snapshot.data as List<dynamic>;
+                  return ListView(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    children: [
+                      ...(tasks).map((e) {
+                        return CustomTile(
+                          taskName: e['name'],
+                          date: e['due_date'],
+                        );
+                      })
+                    ],
+                  );
+                }
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

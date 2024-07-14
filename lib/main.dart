@@ -1,7 +1,9 @@
 import 'package:FinTask/controller.dart';
 import 'package:FinTask/includes/auth_service.dart';
+import 'package:FinTask/pages/deposit.dart';
 import 'package:FinTask/pages/home.dart';
 import 'package:FinTask/pages/login.dart';
+import 'package:FinTask/pages/partners.dart';
 import 'package:FinTask/pages/profile.dart';
 import 'package:FinTask/pages/signup.dart';
 import 'package:FinTask/pages/welcome.dart';
@@ -67,6 +69,8 @@ void main() async {
           '/homecontroller': (context) => Controller(),
           '/home': (context) => const Home(),
           '/login': (context) => const Login(),
+          '/Deposit': (context) => const Deposit(),
+          '/Partners': (context) => const Partners(),
           // '/otp': (context) => const OTP(),
           '/signup': (context) => const SignUp(),
           // '/chat': (context) => const Chat(),

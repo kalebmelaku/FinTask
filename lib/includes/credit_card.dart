@@ -2,6 +2,12 @@ import 'package:FinTask/includes/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:FinTask/includes/url.dart';
+import 'package:FinTask/state/user_provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'dart:convert';
+
 
 class CreditCard extends StatefulWidget {
   const CreditCard({super.key});
@@ -11,11 +17,36 @@ class CreditCard extends StatefulWidget {
 }
 
 class _CreditCardState extends State<CreditCard> {
+  int deposit = 0;
+  @override
+  void initState() {
+    super.initState();
+    getDeposit();
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
+  }
+
+  Future<void> getDeposit() async {
+    final user = context.read<UserProvider>();
+    final userId = user.userId;
+    String uri = "${Url.url}/deposit/$userId";
+    final Uri url = Uri.parse(uri);
+    final response =
+        await http.get(url, headers: {'Content-Type': 'application/json'});
+    if (response.statusCode == 201) {
+      final responseData = jsonDecode(response.body);
+      setState(() {
+        deposit = responseData['depositAmount'];
+      });
+    } else {
+      print(response.body);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: MediaQuery.of(context).size.height/3.5,
+      height: MediaQuery.of(context).size.height / 3.5,
       child: Stack(
         children: [
           Positioned(
@@ -28,7 +59,8 @@ class _CreditCardState extends State<CreditCard> {
                 children: [
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 70.h),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 70.h),
                       decoration: BoxDecoration(
                         color: MyColors.tertiaryColor,
                         borderRadius: const BorderRadius.only(
@@ -53,7 +85,8 @@ class _CreditCardState extends State<CreditCard> {
                 children: [
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 70.h),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 70.h),
                       decoration: BoxDecoration(
                         color: MyColors.secondaryColor,
                         borderRadius: const BorderRadius.only(
@@ -108,7 +141,7 @@ class _CreditCardState extends State<CreditCard> {
                                   height: 5.h,
                                 ),
                                 Text(
-                                  "200, 000",
+                                  deposit.toString(),
                                   style: TextStyle(fontSize: 20.sp),
                                 ),
                               ],

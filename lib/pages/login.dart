@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-
 import 'package:FinTask/includes/auth_service.dart';
 import 'package:FinTask/includes/colors.dart';
 import 'package:FinTask/includes/header.dart';
@@ -100,17 +99,17 @@ class _LoginState extends State<Login> {
                               controller: _password,
                               error: passErr,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextButton(
-                                    onPressed: () => {},
-                                    child: const Text(
-                                      "Forget Password?",
-                                      style: TextStyle(color: Colors.white),
-                                    ))
-                              ],
-                            ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.end,
+                            //   children: [
+                            //     TextButton(
+                            //         onPressed: () => {},
+                            //         child: const Text(
+                            //           "Forget Password?",
+                            //           style: TextStyle(color: Colors.white),
+                            //         ))
+                            //   ],
+                            // ),
                             SizedBox(
                               height: 25.h,
                             ),

@@ -40,7 +40,7 @@ class AuthService {
     final responseData = json.decode(response.body);
     if (response.statusCode == 200) {
       final resData = jsonDecode(response.body);
-      // print((resData['result'][0]['year']).runtimeType);
+      // print(resData['result'][0]);
       final String userId = resData['result'][0]['id'].toString();
       final String name = resData['result'][0]['name'];
       final String email = resData['result'][0]['email'];
@@ -49,8 +49,8 @@ class AuthService {
 
       final user = context.read<UserProvider>();
       user.setUserId(userId, name, email, password);
-      Navigator.pushReplacementNamed(context, "/homecontroller");
-      // Navigator.pushNamed(context, "/homecontroller");
+      // Navigator.pushReplacementNamed(context, "/homecontroller");
+      Navigator.pushNamed(context, "/homecontroller");
     } else {
       print(response.body);
     }

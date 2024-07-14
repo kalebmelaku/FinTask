@@ -13,7 +13,7 @@ Future<void> getUserInfo(BuildContext context, userId) async {
   final Uri url = Uri.parse('$baseUrl/userInfo/$userId');
   final response = await http.get(url);
   // final responseData = json.decode(response.body);
-  if (response.statusCode == 200) {
+  if (response.statusCode == 201) {
     final resData = jsonDecode(response.body);
     final String userId = resData['result'][0]['id'].toString();
     final String name = resData['result'][0]['name'];
@@ -26,7 +26,4 @@ Future<void> getUserInfo(BuildContext context, userId) async {
   } else {
     print(response.body);
   }
-
 }
-
-

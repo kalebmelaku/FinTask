@@ -1,7 +1,13 @@
+import 'dart:convert';
+
+import 'package:FinTask/includes/auth_service.dart';
 import 'package:FinTask/includes/colors.dart';
+import 'package:FinTask/includes/url.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class AddTask extends StatefulWidget {
   const AddTask({super.key});
@@ -11,8 +17,45 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
+  final AuthService authService = AuthService();
+  final TextEditingController _name = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _name.dispose();
+    _password.dispose();
+  }
+
   //  String _selectedDate = '';
   DateTime date = DateTime.now();
+
+  Future<void> addTask() async {
+    final userData = await authService.getToken();
+    final user = userData['userId'];
+    print(date.toString());
+    final Map<String, dynamic> data = {
+      'owner_id': user,
+      'taskName': _name.text,
+      'taskDate': date.toString()
+    };
+    String uri = "${Url.url}/tasks";
+    final Uri url = Uri.parse(uri);
+    final response = await http.post(url,
+        headers: {'Content-Type': 'application/json'}, body: jsonEncode(data));
+    if (response.statusCode == 201) {
+      Navigator.of(context).pushNamed("/homecontroller");
+      final responseJson = jsonDecode(response.body);
+      setState(() {
+        // widget.tasks = responseJson['tasks'];
+        // isLoading = false;
+      });
+    } else {
+      print(response.body);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,7 +73,7 @@ class _AddTaskState extends State<AddTask> {
             ),
             makeInput(
               label: "Task Name", keyType: TextInputType.text,
-              // controller: _email,
+              controller: _name,
               // error: emailErr,
             ),
             SizedBox(
@@ -62,6 +105,7 @@ class _AddTaskState extends State<AddTask> {
                   height: 35.h,
                   onPressed: () {
                     HapticFeedback.vibrate();
+                    addTask();
                     // Navigator.of(context).pushNamed("/homecontroller");
                     // validateInput();
                   },
@@ -85,7 +129,7 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
-  Widget makeInput({label, keyType}) {
+  Widget makeInput({label, keyType, controller}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -102,7 +146,7 @@ class _AddTaskState extends State<AddTask> {
         (label == 'Date')
             ? TextButton(
                 style: const ButtonStyle(
-                    padding: MaterialStatePropertyAll(EdgeInsets.all(0))),
+                    padding: WidgetStatePropertyAll(EdgeInsets.all(0))),
                 onPressed: () async {
                   DateTime? newDate = await showDatePicker(
                     context: context,
@@ -143,6 +187,7 @@ class _AddTaskState extends State<AddTask> {
               )
             : TextField(
                 keyboardType: keyType,
+                controller: controller,
                 decoration: InputDecoration(
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
