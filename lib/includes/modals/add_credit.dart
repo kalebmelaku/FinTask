@@ -1,7 +1,12 @@
 import 'package:FinTask/includes/colors.dart';
+import 'package:FinTask/state/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:convert';
+import 'package:FinTask/includes/url.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class AddCredit extends StatefulWidget {
   const AddCredit({super.key});
@@ -11,79 +16,178 @@ class AddCredit extends StatefulWidget {
 }
 
 class _AddCreditState extends State<AddCredit> {
+  late String userId;
+  String? selectedPartner;
+  List<dynamic> partners = [];
+  final TextEditingController amount = TextEditingController();
+  @override
+  void initState() {
+    userId = '';
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fetchPartner();
+    });
+  }
+
+  Future<void> fetchPartner() async {
+    String uri = "${Url.url}/partner/$userId";
+    final Uri url = Uri.parse(uri);
+    final response = await http.get(url);
+    if (response.statusCode == 201) {
+      final responseJson = jsonDecode(response.body);
+      setState(() {
+        partners = responseJson['tasks'];
+      });
+    } else {
+      // print(response.body);
+    }
+  }
+
+  Future<Map<String, dynamic>> addCredit() async {
+    final Map<String, dynamic> data = {
+      'owner_id': userId,
+      'partner': selectedPartner,
+      'amount': amount.text
+    };
+    final String baseUrl = '${Url.url}/credit';
+    final Uri url = Uri.parse(baseUrl);
+    final response = await http.post(url,
+        headers: {'Content-Type': 'application/json'}, body: jsonEncode(data));
+    final responseData = json.decode(response.body);
+    if (response.statusCode == 201) {
+      Navigator.pushReplacementNamed(context, "/homecontroller");
+    } else {
+      print(response.body);
+    }
+
+    return responseData;
+  }
+
   @override
   Widget build(BuildContext context) {
+    userId = Provider.of<UserProvider>(context).userId;
     return Container(
       decoration: BoxDecoration(
           color: MyColors.primaryColorBg,
           borderRadius: const BorderRadius.only(
               bottomRight: Radius.circular(15),
               bottomLeft: Radius.circular(15))),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 10.h,
-            ),
-            makeInput(
-              label: "Provider Name", keyType: TextInputType.text,
-              // controller: _email,
-              // error: emailErr,
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            makeInput(
-              label: "Amount",
-              keyType: TextInputType.number,
-              // controller: _password,
-              // error: passErr,
-            ),
-            SizedBox(
-              height: 25.h,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Container(
-                padding: const EdgeInsets.only(top: 3, left: 3),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: const Border(
-                      bottom: BorderSide(color: Colors.white),
-                      top: BorderSide(color: Colors.white),
-                      left: BorderSide(color: Colors.white),
-                      right: BorderSide(color: Colors.white),
-                    )),
-                child: MaterialButton(
-                  minWidth: double.infinity,
-                  height: 35.h,
-                  onPressed: () {
-                    HapticFeedback.vibrate();
-                    // Navigator.of(context).pushNamed("/homecontroller");
-                    // validateInput();
-                  },
-                  color: MyColors.primaryColor,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Text(
-                    "Add Credit",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20.sp,
-                        color: Colors.white),
+      child: partners.isEmpty
+          ? Center(
+              child: Text(
+              "Please add credit partner first",
+              style: TextStyle(fontSize: 15.sp),
+            ))
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: 10.h,
                   ),
-                ),
+                  Text(
+                    "Select Partner",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  DropdownButton(
+                    isExpanded: true,
+                    // isDense: true,
+                    selectedItemBuilder: (BuildContext context) {
+                      return partners.map<Widget>((partner) {
+                        return Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            partner['name'],
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        );
+                      }).toList();
+                    },
+                    items: partners.map((partner) {
+                      return DropdownMenuItem<String>(
+                        value: partner['id']
+                            .toString(), // Assuming 'id' is a string or can be converted to a string
+                        child: Text(
+                          partner[
+                              'name'], // Adjust this according to your data structure
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      );
+                    }).toList(),
+                    hint: const Text('Select Partner'),
+                    value: selectedPartner,
+                    style: const TextStyle(color: Colors.white),
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedPartner = newValue;
+                      });
+                    },
+                  ),
+                  // makeInput(
+                  //   label: "Provider Name", keyType: TextInputType.text,
+                  //   // controller: _email,
+                  //   // error: emailErr,
+                  // ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  makeInput(
+                    label: "Amount",
+                    keyType: TextInputType.number,
+                    controller: amount,
+                    // error: passErr,
+                  ),
+                  SizedBox(
+                    height: 25.h,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 3, left: 3),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: const Border(
+                            bottom: BorderSide(color: Colors.white),
+                            top: BorderSide(color: Colors.white),
+                            left: BorderSide(color: Colors.white),
+                            right: BorderSide(color: Colors.white),
+                          )),
+                      child: MaterialButton(
+                        minWidth: double.infinity,
+                        height: 35.h,
+                        onPressed: () {
+                          HapticFeedback.vibrate();
+                          // Navigator.of(context).pushNamed("/homecontroller");
+                          // validateInput();
+                          addCredit().then((data) {
+                            print(data);
+                          });
+                        },
+                        color: MyColors.primaryColor,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Text(
+                          "Add Credit",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20.sp,
+                              color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
     );
   }
 
-  Widget makeInput({label, keyType}) {
+  Widget makeInput({label, keyType, controller}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -99,6 +203,7 @@ class _AddCreditState extends State<AddCredit> {
         ),
         TextField(
           keyboardType: keyType,
+          controller: controller,
           decoration: InputDecoration(
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 0, horizontal: 10),

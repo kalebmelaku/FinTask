@@ -68,7 +68,7 @@ class _ControllerState extends State<Controller> {
         child: currentScreen,
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: MyColors.secondaryColor,
+        backgroundColor: MyColors.primaryColor,
         child: modal.isActive
             ? const Icon(
                 Icons.close,
