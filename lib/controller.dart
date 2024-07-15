@@ -4,6 +4,7 @@ import 'package:FinTask/includes/functions/custom_function.dart';
 import 'package:FinTask/includes/modal.dart';
 import 'package:FinTask/pages/credit.dart';
 import 'package:FinTask/pages/home.dart';
+import 'package:FinTask/pages/profile.dart';
 import 'package:FinTask/state/modal_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -46,7 +47,7 @@ class _ControllerState extends State<Controller> {
     const Home(),
     const Home(),
     const Home(),
-    const Home(),
+    const Profile(),
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
@@ -58,8 +59,8 @@ class _ControllerState extends State<Controller> {
         : currentIndex == 1
             ? const Credit()
             : currentIndex == 2
-                ? const Home()
-                : const Home();
+                ? const Credit()
+                : const Profile();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: MyColors.backgroundColor,
@@ -207,7 +208,7 @@ class _ControllerState extends State<Controller> {
                     minWidth: 50,
                     onPressed: () {
                       setState(() {
-                        currentScreen = const Home();
+                        currentScreen = const Profile();
                         currentIndex = 3;
                       });
                     },

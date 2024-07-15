@@ -32,13 +32,13 @@ class _TopInfoState extends State<TopInfo> {
       children: [
         Row(
           children: [
-            CircleAvatar(
-              backgroundColor: MyColors.secondaryColor,
-              radius: 25,
-            ),
-            SizedBox(
-              width: 15.w,
-            ),
+            // CircleAvatar(
+            //   backgroundColor: MyColors.secondaryColor,
+            //   radius: 25,
+            // ),
+            // SizedBox(
+            //   width: 15.w,
+            // ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -18,11 +18,12 @@ Future<void> getUserInfo(BuildContext context, userId) async {
     final String userId = resData['result'][0]['id'].toString();
     final String name = resData['result'][0]['name'];
     final String email = resData['result'][0]['email'];
+    final String phone = resData['result'][0]['phone'];
     final String password = resData['result'][0]['password'];
 
     // ignore: use_build_context_synchronously
     final user = context.read<UserProvider>();
-    user.setUserId(userId, name, email, password);
+    user.setUserId(userId, name, email, phone, password);
   } else {
     print(response.body);
   }

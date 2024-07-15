@@ -46,10 +46,11 @@ class AuthService {
       final String name = resData['result'][0]['name'];
       final String email = resData['result'][0]['email'];
       final String password = resData['result'][0]['password'];
+      final String phone = resData['result'][0]['phone'];
       await storeToken(responseData['token'], userId.toString());
 
       final user = context.read<UserProvider>();
-      user.setUserId(userId, name, email, password);
+      user.setUserId(userId, name, email, phone, password);
       // Navigator.pushReplacementNamed(context, "/homecontroller");
       Navigator.pushNamed(context, "/homecontroller");
     } else {
