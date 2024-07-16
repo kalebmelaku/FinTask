@@ -154,24 +154,24 @@ class _LoginState extends State<Login> {
                       SizedBox(
                         height: 25.h,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            "Don't have an account?",
-                            style: TextStyle(fontSize: 15.sp),
-                          ),
-                          GestureDetector(
-                            onTap: () =>
-                                {Navigator.of(context).pushNamed("/signup")},
-                            child: Text(
-                              "Sign up",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 18.sp),
-                            ),
-                          ),
-                        ],
-                      )
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: <Widget>[
+                      //     Text(
+                      //       "Don't have an account?",
+                      //       style: TextStyle(fontSize: 15.sp),
+                      //     ),
+                      //     GestureDetector(
+                      //       onTap: () =>
+                      //           {Navigator.of(context).pushNamed("/signup")},
+                      //       child: Text(
+                      //         "Sign up",
+                      //         style: TextStyle(
+                      //             fontWeight: FontWeight.w600, fontSize: 18.sp),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // )
                     ],
                   ),
                 ),

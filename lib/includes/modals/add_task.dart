@@ -17,7 +17,7 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
-   var logger = Logger();
+  var logger = Logger();
   final AuthService authService = AuthService();
   final TextEditingController _name = TextEditingController();
   final TextEditingController _password = TextEditingController();
@@ -61,7 +61,7 @@ class _AddTaskState extends State<AddTask> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: MyColors.primaryColorBg,
+          color: MyColors.backgroundColor,
           borderRadius: const BorderRadius.only(
               bottomRight: Radius.circular(15),
               bottomLeft: Radius.circular(15))),

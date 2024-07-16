@@ -17,7 +17,7 @@ class AddPayment extends StatefulWidget {
 }
 
 class _AddPaymentState extends State<AddPayment> {
-   var logger = Logger();
+  var logger = Logger();
   String selectedOption = 'Personal';
   late String userId;
   String? selectedReason;
@@ -73,7 +73,7 @@ class _AddPaymentState extends State<AddPayment> {
     userId = Provider.of<UserProvider>(context).userId;
     return Container(
       decoration: BoxDecoration(
-          color: MyColors.primaryColorBg,
+          color: MyColors.backgroundColor,
           borderRadius: const BorderRadius.only(
               bottomRight: Radius.circular(15),
               bottomLeft: Radius.circular(15))),

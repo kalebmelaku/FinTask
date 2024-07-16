@@ -70,7 +70,7 @@ class _AddCreditState extends State<AddCredit> {
     userId = Provider.of<UserProvider>(context).userId;
     return Container(
       decoration: BoxDecoration(
-          color: MyColors.primaryColorBg,
+          color: MyColors.backgroundColor,
           borderRadius: const BorderRadius.only(
               bottomRight: Radius.circular(15),
               bottomLeft: Radius.circular(15))),

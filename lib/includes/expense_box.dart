@@ -38,6 +38,7 @@ class _ExpenseBoxState extends State<ExpenseBox> {
     if (response.statusCode == 201) {
       final responseJson = jsonDecode(response.body);
       logger.i(responseJson);
+      Navigator.pushReplacementNamed(context, '/homecontroller');
       setState(() {
         widget.expenses = responseJson['result'];
       });
