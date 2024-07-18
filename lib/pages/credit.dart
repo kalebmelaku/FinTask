@@ -1,9 +1,6 @@
 import 'package:FinTask/includes/functions/local_notifications.dart';
-import 'package:FinTask/includes/functions/notify_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class Credit extends StatefulWidget {
   const Credit({super.key});

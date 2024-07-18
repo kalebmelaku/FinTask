@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:convert';
 
 import 'package:FinTask/includes/auth_service.dart';
@@ -29,9 +31,9 @@ class _ExpenseBoxState extends State<ExpenseBox> {
   late String userId;
 
   Future<void> deleteExpense(taskId) async {
-    final userData = await authService.getToken();
-    final user = userData['userId'];
-    final Map<String, dynamic> data = {'taskId': taskId, 'userId': user};
+    // final userData = await authService.getToken();
+    // final user = userData['userId'];
+    // final Map<String, dynamic> data = {'taskId': taskId, 'userId': user};
     String uri = "${Url.url}/expense/$taskId";
     final Uri url = Uri.parse(uri);
     final response = await http.delete(url);

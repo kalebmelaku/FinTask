@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:FinTask/includes/auth_service.dart';
-import 'package:FinTask/includes/colors.dart';
 import 'package:FinTask/state/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
