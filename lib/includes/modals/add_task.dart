@@ -8,6 +8,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+
+import '../functions/local_notifications.dart';
 
 class AddTask extends StatefulWidget {
   const AddTask({super.key});
@@ -21,6 +24,7 @@ class _AddTaskState extends State<AddTask> {
   final AuthService authService = AuthService();
   final TextEditingController _name = TextEditingController();
   final TextEditingController _password = TextEditingController();
+  DateTime? selectedDateTime;
 
   @override
   void dispose() {
@@ -39,13 +43,19 @@ class _AddTaskState extends State<AddTask> {
     final Map<String, dynamic> data = {
       'owner_id': user,
       'taskName': _name.text,
-      'taskDate': date.toString()
+      'taskDate': selectedDateTime.toString(),
     };
     String uri = "${Url.url}/tasks";
     final Uri url = Uri.parse(uri);
     final response = await http.post(url,
         headers: {'Content-Type': 'application/json'}, body: jsonEncode(data));
     if (response.statusCode == 201) {
+      LocalNotifications.showScheduleNotification(
+                          title: "Pending Task",
+                          body: _name.text,
+                          payload: '',
+                          scheduledNotificationDateTime: selectedDateTime
+                        );
       Navigator.of(context).pushNamed("/homecontroller");
       // final responseJson = jsonDecode(response.body);
       setState(() {
@@ -80,11 +90,21 @@ class _AddTaskState extends State<AddTask> {
             SizedBox(
               height: 10.h,
             ),
-            makeInput(
-              label: "Date",
-              keyType: TextInputType.datetime,
-              // controller: _password,
-              // error: passErr,
+            // makeInput(
+            //   label: "Date",
+            //   keyType: TextInputType.datetime,
+            //   // controller: _password,
+            //   // error: passErr,
+            // ),
+            TextButton(
+              onPressed: () async {
+                final DateTime? dateTime = await showOmniDateTimePicker(
+                    context: context, is24HourMode: false);
+                setState(() {
+                  selectedDateTime = dateTime;
+                });
+              },
+              child: const Text("Select Date Time"),
             ),
             SizedBox(
               height: 25.h,
