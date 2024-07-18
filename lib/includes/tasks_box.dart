@@ -71,7 +71,8 @@ class _TasksBoxState extends State<TasksBox> {
     if (response.statusCode == 201) {
       final responseJson = jsonDecode(response.body);
       setState(() {
-        widget.tasks = responseJson['tasks'];
+        Navigator.pushNamed(context, '/homecontroller');
+        // widget.tasks = responseJson['tasks'];
         isLoading = false;
       });
     } else {

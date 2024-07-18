@@ -2,6 +2,7 @@ import 'package:FinTask/controller.dart';
 import 'package:FinTask/includes/auth_service.dart';
 import 'package:FinTask/includes/functions/local_notifications.dart';
 import 'package:FinTask/pages/ExpenseOptions.dart';
+import 'package:FinTask/pages/allTasks.dart';
 import 'package:FinTask/pages/deposit.dart';
 import 'package:FinTask/pages/home.dart';
 import 'package:FinTask/pages/login.dart';
@@ -81,6 +82,7 @@ void main() async {
           '/partners': (context) => const Partners(),
           '/expenseOpt': (context) => const ExpenseOptions(),
           '/payCredit': (context) => const PayCredit(),
+          '/allTasks': (context) => const AllTasks(),
           // '/otp': (context) => const OTP(),
           '/signup': (context) => const SignUp(),
           // '/chat': (context) => const Chat(),

@@ -112,7 +112,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               style: TextStyle(fontSize: 15.sp),
                             ),
                             TextButton(
-                              onPressed: () => {print("more")},
+                              onPressed: () => {
+                                Navigator.pushReplacementNamed(context, '/allTasks')
+                              },
                               child: Text(
                                 "See All",
                                 style: TextStyle(
