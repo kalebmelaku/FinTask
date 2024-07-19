@@ -67,12 +67,14 @@ class _AllTasksState extends State<AllTasks> {
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
       appBar: AppBar(
+        elevation: 0,
+        excludeHeaderSemantics: true,
         foregroundColor: Colors.white,
         title: const Text(
           "All Tasks",
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: MyColors.backgroundColor,
+        backgroundColor: MyColors.tertiaryColor,
         actions: const [],
       ),
       body: SafeArea(
