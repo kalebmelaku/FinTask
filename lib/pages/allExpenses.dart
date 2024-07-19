@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:FinTask/includes/colors.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:accordion/accordion.dart';
+import 'package:accordion/controllers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import "package:FinTask/includes/url.dart";
@@ -19,48 +19,51 @@ class AllExpenses extends StatefulWidget {
 
 class _AllExpensesState extends State<AllExpenses> {
   final AuthService authService = AuthService();
-  List<dynamic> tasks = [];
-  List<dynamic> completedTasks = [];
+  Map<String, int> categoryTotals = {};
+  Map<String, List<dynamic>> expenses = {};
+  int totalAmount = 0;
   final formatCurrency = NumberFormat.currency(symbol: '\$', decimalDigits: 0);
   @override
   void initState() {
-    fetchTasks();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      fetchCompletedTasks();
+      fetchExpenses();
     });
     super.initState();
   }
 
-  Future<void> fetchTasks() async {
+  Future<void> fetchExpenses() async {
     final userData = await authService.getToken();
     final user = userData['userId'];
-    String uri = "${Url.url}/todayExpense/$user";
+    String uri = "${Url.url}/expense/today/$user";
     final Uri url = Uri.parse(uri);
     final response = await http.get(url);
-    if (response.statusCode == 201) {
+
+    if (response.statusCode == 200) {
       final responseJson = jsonDecode(response.body);
       setState(() {
-        tasks = responseJson['tasks'];
+        expenses = Map<String, List<dynamic>>.from(responseJson['result']);
+        categoryTotals = calculateCategoryTotals(expenses);
+        totalAmount = calculateTotalAmount(expenses);
       });
     } else {
-      // print(response.body);
+      print(response.body);
     }
   }
 
-  Future<void> fetchCompletedTasks() async {
-    final userData = await authService.getToken();
-    final user = userData['userId'];
-    String uri = "${Url.url}/pastExpense/$user";
-    final Uri url = Uri.parse(uri);
-    final response = await http.get(url);
-    if (response.statusCode == 201) {
-      final responseJson = jsonDecode(response.body);
-      setState(() {
-        completedTasks = responseJson['tasks'];
-      });
-    } else {
-      // print(response.body);
-    }
+  Map<String, int> calculateCategoryTotals(
+      Map<String, List<dynamic>> expenses) {
+    Map<String, int> totals = {};
+    expenses.forEach((category, items) {
+      int total = items.fold(0, (sum, item) => (sum + item['amount']).toInt());
+      totals[category] = total;
+    });
+    return totals;
+  }
+
+  int calculateTotalAmount(Map<String, List<dynamic>> expenses) {
+    return expenses.values
+        .expand((items) => items)
+        .fold(0, (sum, item) => (sum + item['amount']).toInt());
   }
 
   @override
@@ -96,7 +99,7 @@ class _AllExpensesState extends State<AllExpenses> {
                           radius: 65.0,
                           backgroundColor: MyColors.tertiaryColor,
                           child: Text(
-                            formatCurrency.format(900000),
+                            formatCurrency.format(totalAmount),
                             style:
                                 TextStyle(color: Colors.white, fontSize: 20.sp),
                           ),
@@ -105,16 +108,14 @@ class _AllExpensesState extends State<AllExpenses> {
                           height: 20.h,
                         ),
                         Wrap(
-                          alignment: WrapAlignment.spaceBetween,
+                          alignment: WrapAlignment.start,
                           crossAxisAlignment: WrapCrossAlignment.center,
                           spacing: 20,
                           runSpacing: 20,
-                          children: [
-                            totalCategory(total: 2500, name: "Personal"),
-                            totalCategory(total: 3500, name: "Home"),
-                            totalCategory(total: 500, name: "Office"),
-                            totalCategory(total: 4500, name: "Other"),
-                          ],
+                          children: categoryTotals.entries.map((entry) {
+                            return totalCategory(
+                                total: entry.value, name: entry.key);
+                          }).toList(),
                         ),
                         SizedBox(
                           height: 10.h,
@@ -123,13 +124,11 @@ class _AllExpensesState extends State<AllExpenses> {
                           thickness: 1.0,
                           color: Colors.white54,
                         ),
+                        expenses.isEmpty
+                            ? const Center(child: CircularProgressIndicator())
+                            : buildAccordion(),
                       ],
                     ),
-                    // (tasks.isEmpty)
-                    //     ? const Center(
-                    //         child: Text("No Expenses Available for today"),
-                    //       )
-                    //     : TasksBox(tasks: tasks),
                   ],
                 ),
               ),
@@ -152,6 +151,49 @@ class _AllExpensesState extends State<AllExpenses> {
           style: TextStyle(color: Colors.white54, fontSize: 12.sp),
         ),
       ],
+    );
+  }
+
+  Widget buildAccordion() {
+    return Accordion(
+      openAndCloseAnimation: true,
+      contentBorderWidth: 0,
+      sectionOpeningHapticFeedback: SectionHapticFeedback.heavy,
+      sectionClosingHapticFeedback: SectionHapticFeedback.light,
+      children: expenses.entries.map((entry) {
+        return AccordionSection(
+          isOpen: false,
+          headerBackgroundColor: MyColors.secondaryColor,
+          headerPadding:
+              const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+          rightIcon: const Icon(Icons.keyboard_arrow_down),
+          header: Text(
+            entry.key.toString(),
+            style: TextStyle(fontSize: 18.sp, color: Colors.white),
+          ),
+          content: Column(
+            children: entry.value.map<Widget>((expense) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      expense['note'],
+                      style: TextStyle(color: Colors.black, fontSize: 18.sp),
+                    ),
+                    Text(
+                      formatCurrency.format(expense['amount']),
+                      style: TextStyle(color: Colors.black, fontSize: 18.sp),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        );
+      }).toList(),
     );
   }
 }

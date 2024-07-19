@@ -39,7 +39,6 @@ class _CreditCardState extends State<CreditCard> {
         await http.get(url, headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 201) {
       final responseData = jsonDecode(response.body);
-      logger.i(responseData);
       setState(() {
         deposit = responseData['depositAmount'];
       });
