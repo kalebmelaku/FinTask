@@ -34,6 +34,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     userId = '';
     tabController = TabController(length: 2, vsync: this);
+      fetchTasks();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetchTasks();
       fetchExpenses();
@@ -125,7 +126,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           ? const Center(
                               child: Text("No Tasks Available for today"),
                             )
-                          : TasksBox(tasks: tasks),
+                          : TasksBox(tasks: tasks, page: 'home'),
                       SizedBox(
                         height: 15.h,
                       ),

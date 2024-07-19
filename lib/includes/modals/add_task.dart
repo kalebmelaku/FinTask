@@ -51,11 +51,10 @@ class _AddTaskState extends State<AddTask> {
         headers: {'Content-Type': 'application/json'}, body: jsonEncode(data));
     if (response.statusCode == 201) {
       LocalNotifications.showScheduleNotification(
-                          title: "Pending Task",
-                          body: _name.text,
-                          payload: '',
-                          scheduledNotificationDateTime: selectedDateTime
-                        );
+          title: "Pending Task",
+          body: _name.text,
+          payload: '',
+          scheduledNotificationDateTime: selectedDateTime);
       Navigator.of(context).pushNamed("/homecontroller");
       // final responseJson = jsonDecode(response.body);
       setState(() {
@@ -90,21 +89,11 @@ class _AddTaskState extends State<AddTask> {
             SizedBox(
               height: 10.h,
             ),
-            // makeInput(
-            //   label: "Date",
-            //   keyType: TextInputType.datetime,
-            //   // controller: _password,
-            //   // error: passErr,
-            // ),
-            TextButton(
-              onPressed: () async {
-                final DateTime? dateTime = await showOmniDateTimePicker(
-                    context: context, is24HourMode: false);
-                setState(() {
-                  selectedDateTime = dateTime;
-                });
-              },
-              child: const Text("Select Date Time"),
+            makeInput(
+              label: "Date",
+              keyType: TextInputType.datetime,
+              // controller: _password,
+              // error: passErr,
             ),
             SizedBox(
               height: 25.h,
@@ -169,14 +158,10 @@ class _AddTaskState extends State<AddTask> {
                 style: const ButtonStyle(
                     padding: WidgetStatePropertyAll(EdgeInsets.all(0))),
                 onPressed: () async {
-                  DateTime? newDate = await showDatePicker(
-                    context: context,
-                    initialDate: date,
-                    firstDate: DateTime(1990),
-                    lastDate: DateTime(2100),
-                  );
+                  final DateTime? dateTime = await showOmniDateTimePicker(
+                      context: context, is24HourMode: false);
                   setState(() {
-                    date = newDate!;
+                    selectedDateTime = dateTime;
                   });
                 },
                 child: Row(
@@ -196,7 +181,7 @@ class _AddTaskState extends State<AddTask> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 15),
                           child: Text(
-                            '${date.year} - ${date.month} - ${date.day}',
+                            '${selectedDateTime ?? DateTime.now()}',
                             style:
                                 TextStyle(fontSize: 16.sp, color: Colors.white),
                           ),

@@ -75,7 +75,6 @@ class _AllTasksState extends State<AllTasks> {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: MyColors.tertiaryColor,
-        actions: const [],
       ),
       body: SafeArea(
         child: Column(
@@ -97,7 +96,7 @@ class _AllTasksState extends State<AllTasks> {
                         ? const Center(
                             child: Text("No Tasks Available for today"),
                           )
-                        : TasksBox(tasks: tasks),
+                        : TasksBox(tasks: tasks, page: 'task'),
                     SizedBox(
                       height: 20.h,
                     ),
@@ -112,7 +111,10 @@ class _AllTasksState extends State<AllTasks> {
                         ? const Center(
                             child: Text("No Tasks Available for today"),
                           )
-                        : TasksBox(tasks: completedTasks),
+                        : TasksBox(
+                            tasks: completedTasks,
+                            page: 'task',
+                          ),
                   ],
                 ),
               ),

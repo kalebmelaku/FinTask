@@ -13,7 +13,8 @@ import 'package:http/http.dart' as http;
 
 class TasksBox extends StatefulWidget {
   List<dynamic> tasks;
-  TasksBox({super.key, required this.tasks});
+  String page;
+  TasksBox({super.key, required this.tasks, required this.page});
 
   @override
   State<TasksBox> createState() => _TasksBoxState();
@@ -40,19 +41,26 @@ class _TasksBoxState extends State<TasksBox> {
     super.initState();
   }
 
-  Future<void> deleteTask(taskId) async {
+  Future<void> deleteTask(taskId, status) async {
     final userData = await authService.getToken();
     final user = userData['userId'];
-    final Map<String, dynamic> data = {'taskId': taskId, 'userId': user};
+    final page = widget.page;
+    final Map<String, dynamic> data = {
+      'taskId': taskId,
+      'userId': user,
+      'page': page,
+      'status': status
+    };
     String uri = "${Url.url}/tasks";
     final Uri url = Uri.parse(uri);
     final response = await http.delete(url,
         headers: {'Content-Type': 'application/json'}, body: jsonEncode(data));
     if (response.statusCode == 201) {
-      final responseJson = jsonDecode(response.body);
+      // final responseJson = jsonDecode(response.body);
+      Navigator.pushNamed(context, '/homecontroller');
       setState(() {
-        widget.tasks = responseJson['tasks'];
-        isLoading = false;
+        // widget.tasks = responseJson['tasks'];
+        // isLoading = false;
       });
     } else {
       print(response.body);
@@ -63,7 +71,8 @@ class _TasksBoxState extends State<TasksBox> {
   Future<void> updateTask(taskId) async {
     final userData = await authService.getToken();
     final user = userData['userId'];
-    final Map<String, dynamic> data = {'taskId': taskId, 'userId': user};
+    final page = widget.page;
+    final Map<String, dynamic> data = {'taskId': taskId, 'userId': user, 'page': page};
     String uri = "${Url.url}/tasks/confirm";
     final Uri url = Uri.parse(uri);
     final response = await http.put(url,
@@ -120,7 +129,7 @@ class _TasksBoxState extends State<TasksBox> {
               motion: const StretchMotion(),
               children: [
                 SlidableAction(
-                  onPressed: (context) => {deleteTask(task_id)},
+                  onPressed: (context) => {deleteTask(task_id, status)},
                   icon: Icons.delete,
                   backgroundColor: Colors.red,
                 )
