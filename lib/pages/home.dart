@@ -34,7 +34,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     userId = '';
     tabController = TabController(length: 2, vsync: this);
-      fetchTasks();
+    fetchTasks();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetchTasks();
       fetchExpenses();
@@ -84,82 +84,88 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     // bool modal = Provider.of<ModalProvider>(context).isActive;
     userId = Provider.of<UserProvider>(context).userId;
-    return Scaffold(
-        backgroundColor: MyColors.backgroundColor,
-        body: SafeArea(
-          child: (Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: TopInfo(),
-              ),
-              Expanded(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                  child: ListView(
-                    children: [
-                      const CreditCard(),
-                      const Options(),
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      Row(
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+          backgroundColor: MyColors.backgroundColor,
+          body: SafeArea(
+            child: (Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: TopInfo(),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                    child: ListView(
+                      children: [
+                        const CreditCard(),
+                        const Options(),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Today's Tasks",
+                                style: TextStyle(fontSize: 15.sp),
+                              ),
+                              TextButton(
+                                onPressed: () =>
+                                    {Navigator.pushNamed(context, '/allTasks')},
+                                child: Text(
+                                  "See All",
+                                  style: TextStyle(
+                                      fontSize: 15.sp, color: Colors.white),
+                                ),
+                              ),
+                            ]),
+                        (tasks.isEmpty)
+                            ? const Center(
+                                child: Text("No Tasks Available for today"),
+                              )
+                            : TasksBox(tasks: tasks, page: 'home'),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "Today's Tasks",
+                              "Today's Expenses",
                               style: TextStyle(fontSize: 15.sp),
                             ),
                             TextButton(
-                              onPressed: () =>
-                                  {Navigator.pushNamed(context, '/allTasks')},
+                              onPressed: () => {
+                                Navigator.pushNamed(context, '/allExpenses')
+                              },
                               child: Text(
                                 "See All",
                                 style: TextStyle(
                                     fontSize: 15.sp, color: Colors.white),
                               ),
                             ),
-                          ]),
-                      (tasks.isEmpty)
-                          ? const Center(
-                              child: Text("No Tasks Available for today"),
-                            )
-                          : TasksBox(tasks: tasks, page: 'home'),
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Today's Expenses",
-                            style: TextStyle(fontSize: 15.sp),
-                          ),
-                          TextButton(
-                            onPressed: () =>
-                                {Navigator.pushNamed(context, '/allExpenses')},
-                            child: Text(
-                              "See All",
-                              style: TextStyle(
-                                  fontSize: 15.sp, color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      ),
-                      (expenses.isEmpty)
-                          ? const Center(
-                              child: Text("No Expenses Available for today"),
-                            )
-                          : ExpenseBox(expenses: expenses),
-                    ],
+                          ],
+                        ),
+                        (expenses.isEmpty)
+                            ? const Center(
+                                child: Text("No Expenses Available for today"),
+                              )
+                            : ExpenseBox(expenses: expenses),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            )),
           )),
-        ));
+    );
   }
 }

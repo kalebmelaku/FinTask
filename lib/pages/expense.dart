@@ -83,164 +83,131 @@ class _ExpenseState extends State<Expense> {
   @override
   Widget build(BuildContext context) {
     userId = Provider.of<UserProvider>(context).userId;
-    return Scaffold(
-      backgroundColor: MyColors.backgroundColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: TopInfo(),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: TextButton(
-                      style: const ButtonStyle(
-                          padding: WidgetStatePropertyAll(EdgeInsets.all(0))),
-                      onPressed: () async {
-                        final DateTime? dateTime = await showOmniDateTimePicker(
-                          context: context,
-                          type: OmniDateTimePickerType.date,
-                        );
-                        // print(dateTime.toString().split(" ")[0]);
-                        selectedDateTime = dateTime.toString().split(" ")[0];
-                        setState(() {
-                          selectedYear = dateTime.toString().split("-")[0];
-                          selectedMonth = dateTime.toString().split("-")[1];
-                          fetchExpenses();
-                        });
-                      },
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                              decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  border: Border.all(
-                                    color:
-                                        const Color.fromRGBO(189, 189, 189, 1),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(15))),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 15),
-                                child: Center(
-                                  child: Text(
-                                    '$selectedYear  $selectedMonth',
-                                    style: TextStyle(
-                                      fontSize: 16.sp,
-                                      color: Colors.white,
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: MyColors.backgroundColor,
+        body: SafeArea(
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: TopInfo(),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        style: const ButtonStyle(
+                            padding: WidgetStatePropertyAll(EdgeInsets.all(0))),
+                        onPressed: () async {
+                          final DateTime? dateTime =
+                              await showOmniDateTimePicker(
+                            context: context,
+                            type: OmniDateTimePickerType.date,
+                          );
+                          // print(dateTime.toString().split(" ")[0]);
+                          selectedDateTime = dateTime.toString().split(" ")[0];
+                          setState(() {
+                            selectedYear = dateTime.toString().split("-")[0];
+                            selectedMonth = dateTime.toString().split("-")[1];
+                            fetchExpenses();
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                decoration: BoxDecoration(
+                                    color: Colors.transparent,
+                                    border: Border.all(
+                                      color: const Color.fromRGBO(
+                                          189, 189, 189, 1),
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(15))),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 15),
+                                  child: Center(
+                                    child: Text(
+                                      '$selectedYear  $selectedMonth',
+                                      style: TextStyle(
+                                        fontSize: 16.sp,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                  // Expanded(
-                  //   child: DropdownButton<String>(
-                  //     value: selectedYear,
-                  //     onChanged: (String? newYear) {
-                  //       setState(() {
-                  //         selectedYear = newYear!;
-                  //         fetchExpenses();
-                  //       });
-                  //     },
-                  //     items: List.generate(5, (index) {
-                  //       int year = DateTime.now().year - 2 + index;
-                  //       return DropdownMenuItem<String>(
-                  //         value: year.toString(),
-                  //         child: Text(year.toString()),
-                  //       );
-                  //     }),
-                  //   ),
-                  // ),
-                  // const SizedBox(width: 16),
-                  // Expanded(
-                  //   child: DropdownButton<String>(
-                  //     value: selectedMonth,
-                  //     onChanged: (String? newMonth) {
-                  //       setState(() {
-                  //         selectedMonth = newMonth!;
-                  //         fetchExpenses();
-                  //       });
-                  //     },
-                  //     items: List.generate(12, (index) {
-                  //       String monthStr =
-                  //           DateFormat('MM').format(DateTime(0, index + 1));
-                  //       return DropdownMenuItem<String>(
-                  //         value: monthStr,
-                  //         child: Text(DateFormat('MMMM')
-                  //             .format(DateTime(0, index + 1))),
-                  //       );
-                  //     }),
-                  //   ),
-                  // ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                child: ListView(
-                  children: [
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 65.0,
-                          backgroundColor: MyColors.tertiaryColor,
-                          child: Text(
-                            formatCurrency.format(totalAmount),
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 20.sp),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        Wrap(
-                          alignment: WrapAlignment.start,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          spacing: 20,
-                          runSpacing: 20,
-                          children: categoryTotals.entries.map((entry) {
-                            return totalCategory(
-                                total: entry.value, name: entry.key);
-                          }).toList(),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        const Divider(
-                          thickness: 1.0,
-                          color: Colors.white54,
-                        ),
-                        expenses.isEmpty
-                            ? const Center(
-                                child: Text(
-                                    "No expense Available for selected month and year"))
-                            : buildAccordion(),
-                      ],
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                  child: ListView(
+                    children: [
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 65.0,
+                            backgroundColor: MyColors.tertiaryColor,
+                            child: Text(
+                              formatCurrency.format(totalAmount),
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 20.sp),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          Wrap(
+                            alignment: WrapAlignment.start,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 20,
+                            runSpacing: 20,
+                            children: categoryTotals.entries.map((entry) {
+                              return totalCategory(
+                                  total: entry.value, name: entry.key);
+                            }).toList(),
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          const Divider(
+                            thickness: 1.0,
+                            color: Colors.white54,
+                          ),
+                          expenses.isEmpty
+                              ? const Center(
+                                  child: Text(
+                                      "No expense Available for selected month and year"))
+                              : buildAccordion(),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

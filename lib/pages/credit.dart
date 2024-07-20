@@ -101,59 +101,64 @@ class _CreditState extends State<Credit> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyColors.backgroundColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: TopInfo(),
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                child: ListView(
-                  children: [
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              "Unpaid Credits",
-                              style: TextStyle(fontSize: 20.sp),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 5.h),
-                        expenses.isEmpty
-                            ? const Center(
-                                child: Text("No Unpaid Credit Available"))
-                            : buildAccordion(status: false),
-                        Row(
-                          children: [
-                            Text(
-                              "Paid Credits",
-                              style: TextStyle(fontSize: 20.sp),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 5.h),
-                        paidExpenses.isEmpty
-                            ? const Center(
-                                child: Text("No Payed Credit Available"))
-                            : buildAccordion(status: true),
-                      ],
-                    ),
-                  ],
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: MyColors.backgroundColor,
+        body: SafeArea(
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: TopInfo(),
+              ),
+              Expanded(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                  child: ListView(
+                    children: [
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                "Unpaid Credits",
+                                style: TextStyle(fontSize: 20.sp),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 5.h),
+                          expenses.isEmpty
+                              ? const Center(
+                                  child: Text("No Unpaid Credit Available"))
+                              : buildAccordion(status: false),
+                          Row(
+                            children: [
+                              Text(
+                                "Paid Credits",
+                                style: TextStyle(fontSize: 20.sp),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 5.h),
+                          paidExpenses.isEmpty
+                              ? const Center(
+                                  child: Text("No Payed Credit Available"))
+                              : buildAccordion(status: true),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -187,7 +192,6 @@ class _CreditState extends State<Credit> {
                           style: const TextStyle(color: Colors.white),
                         ),
                       ),
-
                       shape: const ContinuousRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(18))),
                     ),
@@ -223,7 +227,6 @@ class _CreditState extends State<Credit> {
                           style: const TextStyle(color: Colors.white),
                         ),
                       ),
-
                       shape: const ContinuousRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(18))),
                     ),
