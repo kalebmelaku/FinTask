@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:FinTask/includes/colors.dart';
-import 'package:FinTask/includes/top_info.dart';
 import 'package:FinTask/state/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +19,7 @@ class Deposit extends StatefulWidget {
 }
 
 class _DepositState extends State<Deposit> {
-   var logger = Logger();
+  var logger = Logger();
   late String userId;
   final TextEditingController _amount = TextEditingController();
   @override
@@ -55,23 +54,25 @@ class _DepositState extends State<Deposit> {
     userId = Provider.of<UserProvider>(context).userId;
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
+      appBar: AppBar(
+        foregroundColor: Colors.white,
+        excludeHeaderSemantics: true,
+        title: const Text(
+          "Make Deposit",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: MyColors.tertiaryColor,
+        elevation: 0,
+        actions: const [],
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: TopInfo(),
-            ),
             const Header(
                 pageName: "Deposit", pageDesc: "Make Deposit to your account"),
             SizedBox(
               height: 25.h,
             ),
-            // if (servErr != null)
-            //   Text(
-            //     servErr!,
-            //     style: const TextStyle(color: Colors.redAccent),
-            //   ),
             SizedBox(
               height: 0.h,
             ),

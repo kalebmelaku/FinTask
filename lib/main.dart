@@ -14,7 +14,6 @@ import 'package:FinTask/pages/signup.dart';
 import 'package:FinTask/pages/welcome.dart';
 import 'package:FinTask/state/modal_provider.dart';
 import 'package:FinTask/state/user_provider.dart';
-// import 'package:FinTask/states/user_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -36,11 +36,6 @@ class _SignUpState extends State<SignUp> {
                   height: MediaQuery.of(context).size.height / 9,
                 ),
                 const Header(pageName: "Signup", pageDesc: "Create an account"),
-                // if (servErr != null)
-                //   Text(
-                //     servErr!,
-                //     style: const TextStyle(color: Colors.redAccent),
-                //   ),
                 SizedBox(
                   height: 25.h,
                 ),
@@ -171,7 +166,6 @@ Widget makeInput(
                   const BorderSide(color: Color.fromRGBO(189, 189, 189, 1)),
               borderRadius: BorderRadius.circular(15)),
           border: OutlineInputBorder(
-              // borderSide: BorderSide(color: Color.fromRGBO(189, 189, 189, 1)),
               borderRadius: BorderRadius.circular(15)),
         ),
       ),

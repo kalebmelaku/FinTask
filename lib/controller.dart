@@ -151,12 +151,6 @@ class _ControllerState extends State<Controller> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // Icon(
-                        //   Icons.person,
-                        //   color: currentIndex == 1
-                        //       ? MyColors.primaryColor
-                        //       : Colors.white,
-                        // ),
                         FaIcon(
                           FontAwesomeIcons.commentDollar,
                           color: currentIndex == 1

@@ -56,7 +56,7 @@ class _AddCreditState extends State<AddCredit> {
     final response = await http.post(url,
         headers: {'Content-Type': 'application/json'}, body: jsonEncode(data));
     final responseData = json.decode(response.body);
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       Navigator.pushReplacementNamed(context, "/homecontroller");
     } else {
       logger.e(response.body);
@@ -129,11 +129,6 @@ class _AddCreditState extends State<AddCredit> {
                       });
                     },
                   ),
-                  // makeInput(
-                  //   label: "Provider Name", keyType: TextInputType.text,
-                  //   // controller: _email,
-                  //   // error: emailErr,
-                  // ),
                   SizedBox(
                     height: 20.h,
                   ),

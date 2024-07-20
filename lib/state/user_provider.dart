@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 
 class UserProvider extends ChangeNotifier {
-  // String _crsid = "";
-  // bool _isActive = false;
-  // String _profilePic = "";
-  // String get crsid => _crsid;
-  // String get profilePic => _profilePic;
-  // bool get isActive => _isActive;
   String _userId = "";
   String _phone = "";
   String _name = "";
@@ -26,7 +20,6 @@ class UserProvider extends ChangeNotifier {
     _email = email;
     _password = password;
     notifyListeners();
-    // _profilePic = profilePic;
   }
 
 }

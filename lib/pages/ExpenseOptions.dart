@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:FinTask/includes/colors.dart';
-import 'package:FinTask/includes/top_info.dart';
 import 'package:FinTask/state/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -84,13 +83,24 @@ class _ExpenseOptionsState extends State<ExpenseOptions> {
     userId = Provider.of<UserProvider>(context).userId;
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
+      appBar: AppBar(
+        foregroundColor: Colors.white,
+        excludeHeaderSemantics: true,
+        title: const Text(
+          "Expense Options",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: MyColors.tertiaryColor,
+        elevation: 0,
+        actions: const [],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                const TopInfo(),
+                
                 const Header(
                     pageName: "Expense Reasons",
                     pageDesc: "Add Expense Reason"),

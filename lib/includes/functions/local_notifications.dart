@@ -103,23 +103,4 @@ class LocalNotifications {
         payload: payload);
   }
 
-  // Future scheduleNotification(
-  //     {int id = 0,
-  //     String? title,
-  //     String? body,
-  //     String? payLoad,
-  //     required DateTime? scheduledNotificationDateTime}) async {
-  //   return _flutterLocalNotificationsPlugin.zonedSchedule(
-  //       id,
-  //       title,
-  //       body,
-  //       tz.TZDateTime.from(
-  //         scheduledNotificationDateTime!,
-  //         tz.local,
-  //       ),
-  //       await notificationDetails(),
-  //       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-  //       uiLocalNotificationDateInterpretation:
-  //           UILocalNotificationDateInterpretation.absoluteTime);
-  // }
 }

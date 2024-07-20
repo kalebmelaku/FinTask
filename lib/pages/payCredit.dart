@@ -1,5 +1,4 @@
 import 'package:FinTask/includes/colors.dart';
-import 'package:FinTask/includes/top_info.dart';
 import 'package:FinTask/state/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -57,7 +56,7 @@ class _PayCreditState extends State<PayCredit> {
     final response = await http.post(url,
         headers: {'Content-Type': 'application/json'}, body: jsonEncode(data));
     final responseData = json.decode(response.body);
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       Navigator.pushReplacementNamed(context, "/homecontroller");
     } else {
       logger.e(response.body);
@@ -71,13 +70,23 @@ class _PayCreditState extends State<PayCredit> {
     userId = Provider.of<UserProvider>(context).userId;
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
+      appBar: AppBar(
+        foregroundColor: Colors.white,
+        excludeHeaderSemantics: true,
+        title: const Text(
+          "Pay Credit",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: MyColors.tertiaryColor,
+        elevation: 0,
+        actions: const [],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                const TopInfo(),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -128,11 +137,6 @@ class _PayCreditState extends State<PayCredit> {
                           });
                         },
                       ),
-                      // makeInput(
-                      //   label: "Provider Name", keyType: TextInputType.text,
-                      //   // controller: _email,
-                      //   // error: emailErr,
-                      // ),
                       SizedBox(
                         height: 20.h,
                       ),
@@ -162,8 +166,6 @@ class _PayCreditState extends State<PayCredit> {
                             height: 35.h,
                             onPressed: () {
                               HapticFeedback.vibrate();
-                              // Navigator.of(context).pushNamed("/homecontroller");
-                              // validateInput();
                               payCredit().then((data) {
                                 print(data);
                               });

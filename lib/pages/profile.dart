@@ -47,9 +47,7 @@ class _ProfileState extends State<Profile> {
         headers: {'Content-Type': 'application/json'}, body: jsonEncode(data));
     final responseData = json.decode(response.body);
     if (response.statusCode == 201) {
-      // final resData = jsonDecode(response.body);
       Navigator.pushReplacementNamed(context, "/login");
-      // Navigator.pushNamed(context, "/partners");
     } else {
       logger.e(response);
     }
@@ -177,8 +175,6 @@ class _ProfileState extends State<Profile> {
                                                 minWidth: double.infinity,
                                                 height: 35.h,
                                                 onPressed: () {
-                                                  // Navigator.of(context)
-                                                  //     .pushNamed("/homecontroller");
                                                   updateUser();
                                                 },
                                                 color: MyColors.primaryColor,
@@ -233,7 +229,6 @@ class _ProfileState extends State<Profile> {
                       ),
                       shape: const ContinuousRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(18))),
-                      // shape: BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
                     ),
                     SizedBox(
                       height: 15.h,
@@ -258,7 +253,6 @@ class _ProfileState extends State<Profile> {
                       ),
                       shape: const ContinuousRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(18))),
-                      // shape: BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
                     ),
                     SizedBox(
                       height: 15.h,
@@ -283,7 +277,6 @@ class _ProfileState extends State<Profile> {
                       ),
                       shape: const ContinuousRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(18))),
-                      // shape: BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
                     ),
                   ],
                 ),

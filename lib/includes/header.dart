@@ -15,7 +15,7 @@ class Header extends StatelessWidget {
       children: <Widget>[
         Text(
           pageName,
-          style: TextStyle(fontSize: 35.sp, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.bold),
         ),
         const SizedBox(
           height: 5,

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:FinTask/includes/colors.dart';
-import 'package:FinTask/includes/top_info.dart';
 import 'package:FinTask/state/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -83,23 +82,28 @@ class _PartnersState extends State<Partners> {
     userId = Provider.of<UserProvider>(context).userId;
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
+      appBar: AppBar(
+        foregroundColor: Colors.white,
+        excludeHeaderSemantics: true,
+        title: const Text(
+          "Partners",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: MyColors.tertiaryColor,
+        elevation: 0,
+        actions: const [],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                const TopInfo(),
                 const Header(
                     pageName: "Partners", pageDesc: "Add Credit Partner"),
                 SizedBox(
                   height: 25.h,
                 ),
-                // if (servErr != null)
-                //   Text(
-                //     servErr!,
-                //     style: const TextStyle(color: Colors.redAccent),
-                //   ),
                 SizedBox(
                   height: 0.h,
                 ),

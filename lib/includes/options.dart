@@ -32,15 +32,6 @@ class _OptionsState extends State<Options> {
               size: 30,
             ),
           ),
-          // OptionsBox(
-          //   title: 'Credit',
-          // url: 'expenseOpt',
-          //   icon: Iconify(
-          //     Mdi.account_credit_card,
-          //     color: Colors.white,
-          //     size: 30,
-          //   ),
-          // ),
           OptionsBox(
             title: 'Expense Opt',
             url: 'expenseOpt',
