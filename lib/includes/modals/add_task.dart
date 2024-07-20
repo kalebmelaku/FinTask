@@ -39,7 +39,6 @@ class _AddTaskState extends State<AddTask> {
   Future<void> addTask() async {
     final userData = await authService.getToken();
     final user = userData['userId'];
-    print(date.toString());
     final Map<String, dynamic> data = {
       'owner_id': user,
       'taskName': _name.text,

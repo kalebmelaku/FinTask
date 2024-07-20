@@ -1,6 +1,7 @@
 import 'dart:convert';
-
 import 'package:FinTask/includes/colors.dart';
+import 'package:FinTask/includes/top_info.dart';
+import 'package:FinTask/state/user_provider.dart';
 import 'package:accordion/accordion.dart';
 import 'package:accordion/controllers.dart';
 import 'package:flutter/material.dart';
@@ -10,28 +11,30 @@ import "package:FinTask/includes/url.dart";
 import "package:FinTask/includes/auth_service.dart";
 import 'package:intl/intl.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+import 'package:provider/provider.dart';
 
-class AllExpenses extends StatefulWidget {
-  const AllExpenses({super.key});
+class Expense extends StatefulWidget {
+  const Expense({super.key});
 
   @override
-  State<AllExpenses> createState() => _AllExpensesState();
+  State<Expense> createState() => _ExpenseState();
 }
 
-class _AllExpensesState extends State<AllExpenses> {
+class _ExpenseState extends State<Expense> {
   final AuthService authService = AuthService();
+  late String userId;
   Map<String, int> categoryTotals = {};
   Map<String, List<dynamic>> expenses = {};
   int totalAmount = 0;
   final formatCurrency = NumberFormat.currency(symbol: '\$', decimalDigits: 0);
   String? selectedDateTime;
+  String? selectedYear = DateTime.now().year.toString();
+  String? selectedMonth = DateTime.now().month.toString();
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetchExpenses();
-      // setState(() {
-      //   selectedDateTime = DateTime.now();
-      // });
     });
     super.initState();
   }
@@ -41,9 +44,10 @@ class _AllExpensesState extends State<AllExpenses> {
     final user = userData['userId'];
     final Map<String, dynamic> data = {
       'userId': user,
-      'date': selectedDateTime.toString(),
+      'year': selectedYear,
+      'month': selectedMonth,
     };
-    String uri = "${Url.url}/expense/today";
+    String uri = "${Url.url}/expense/monthly"; // Adjust API endpoint as needed
     final Uri url = Uri.parse(uri);
     final response = await http.post(url,
         headers: {'Content-Type': 'application/json'}, body: jsonEncode(data));
@@ -78,22 +82,113 @@ class _AllExpensesState extends State<AllExpenses> {
 
   @override
   Widget build(BuildContext context) {
+    userId = Provider.of<UserProvider>(context).userId;
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
-      appBar: AppBar(
-        foregroundColor: Colors.white,
-        excludeHeaderSemantics: true,
-        title: const Text(
-          "Today's Expenses",
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: MyColors.tertiaryColor,
-        elevation: 0,
-        actions: const [],
-      ),
       body: SafeArea(
         child: Column(
           children: [
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: TopInfo(),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      style: const ButtonStyle(
+                          padding: WidgetStatePropertyAll(EdgeInsets.all(0))),
+                      onPressed: () async {
+                        final DateTime? dateTime = await showOmniDateTimePicker(
+                          context: context,
+                          type: OmniDateTimePickerType.date,
+                        );
+                        // print(dateTime.toString().split(" ")[0]);
+                        selectedDateTime = dateTime.toString().split(" ")[0];
+                        setState(() {
+                          selectedYear = dateTime.toString().split("-")[0];
+                          selectedMonth = dateTime.toString().split("-")[1];
+                          fetchExpenses();
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                              decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  border: Border.all(
+                                    color:
+                                        const Color.fromRGBO(189, 189, 189, 1),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(15))),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 15),
+                                child: Center(
+                                  child: Text(
+                                    '$selectedYear  $selectedMonth',
+                                    style: TextStyle(
+                                      fontSize: 16.sp,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // Expanded(
+                  //   child: DropdownButton<String>(
+                  //     value: selectedYear,
+                  //     onChanged: (String? newYear) {
+                  //       setState(() {
+                  //         selectedYear = newYear!;
+                  //         fetchExpenses();
+                  //       });
+                  //     },
+                  //     items: List.generate(5, (index) {
+                  //       int year = DateTime.now().year - 2 + index;
+                  //       return DropdownMenuItem<String>(
+                  //         value: year.toString(),
+                  //         child: Text(year.toString()),
+                  //       );
+                  //     }),
+                  //   ),
+                  // ),
+                  // const SizedBox(width: 16),
+                  // Expanded(
+                  //   child: DropdownButton<String>(
+                  //     value: selectedMonth,
+                  //     onChanged: (String? newMonth) {
+                  //       setState(() {
+                  //         selectedMonth = newMonth!;
+                  //         fetchExpenses();
+                  //       });
+                  //     },
+                  //     items: List.generate(12, (index) {
+                  //       String monthStr =
+                  //           DateFormat('MM').format(DateTime(0, index + 1));
+                  //       return DropdownMenuItem<String>(
+                  //         value: monthStr,
+                  //         child: Text(DateFormat('MMMM')
+                  //             .format(DateTime(0, index + 1))),
+                  //       );
+                  //     }),
+                  //   ),
+                  // ),
+                ],
+              ),
+            ),
             Expanded(
               child: Padding(
                 padding:
@@ -105,55 +200,6 @@ class _AllExpensesState extends State<AllExpenses> {
                     ),
                     Column(
                       children: [
-                        TextButton(
-                          style: const ButtonStyle(
-                              padding:
-                                  WidgetStatePropertyAll(EdgeInsets.all(0))),
-                          onPressed: () async {
-                            final DateTime? dateTime =
-                                await showOmniDateTimePicker(
-                              context: context,
-                              type: OmniDateTimePickerType.date,
-                            );
-                            print(dateTime.toString().split(" ")[0]);
-                            setState(() {
-                              selectedDateTime =
-                                  dateTime.toString().split(" ")[0];
-                              fetchExpenses();
-                            });
-                          },
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      border: Border.all(
-                                        color: const Color.fromRGBO(
-                                            189, 189, 189, 1),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(15))),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 15),
-                                    child: Center(
-                                      child: Text(
-                                        selectedDateTime ?? "Select Date",
-                                        style: TextStyle(
-                                            fontSize: 16.sp,
-                                            color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 10.h),
                         CircleAvatar(
                           radius: 65.0,
                           backgroundColor: MyColors.tertiaryColor,
@@ -185,7 +231,8 @@ class _AllExpensesState extends State<AllExpenses> {
                         ),
                         expenses.isEmpty
                             ? const Center(
-                                child: Text("No Expense Available for Today"))
+                                child: Text(
+                                    "No expense Available for selected month and year"))
                             : buildAccordion(),
                       ],
                     ),

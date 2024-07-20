@@ -3,6 +3,7 @@
         "homecontroller",
         "Iconify",
         "prefs",
+        "screenutil",
         "signup",
         "Vaadin"
     ]
