@@ -25,7 +25,6 @@ import 'package:timezone/data/latest.dart' as tz;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalNotifications.init();
-  // NotificationService().initNotification();
   tz.initializeTimeZones();
   ScreenUtilInit;
   SharedPreferences pref = await SharedPreferences.getInstance();
