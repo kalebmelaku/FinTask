@@ -185,7 +185,7 @@ class _CreditState extends State<Credit> {
                             ],
                           ),
                           SizedBox(height: 5.h),
-                          expenses.isEmpty
+                          paidExpenses.isEmpty
                               ? const Center(
                                   child: Text("No Unpaid Credit Available"))
                               : buildAccordion(status: false),
@@ -198,7 +198,7 @@ class _CreditState extends State<Credit> {
                             ],
                           ),
                           SizedBox(height: 5.h),
-                          paidExpenses.isEmpty
+                          expenses.isEmpty
                               ? const Center(
                                   child: Text("No Payed Credit Available"))
                               : buildAccordion(status: true),
