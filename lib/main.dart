@@ -58,26 +58,25 @@ void main() async {
       // designSize: const Size(420, 640),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        // home: isFirstRun
-        //     ? const Welcome()
-        //     : FutureBuilder<Map<String, String?>>(
-        //         future: authService.getToken(),
-        //         builder: (context, snapshot) {
-        //           try {
-        //             if (snapshot.connectionState == ConnectionState.done) {
-        //               if (token != null) {
-        //                 return Controller();
-        //               } else {
-        //                 return const Login();
-        //               }
-        //             }
-        //           } catch (e) {
-        //             // Handle any errors that might occur
-        //           }
-        //           return Container(); // Add a default return value
-        //         },
-        //       ),
-        home: box1.get('isLogged', defaultValue: false) ? Controller() : const Login(),
+        home: isFirstRun
+            ? const Welcome()
+            : FutureBuilder<Map<String, String?>>(
+                future: authService.getToken(),
+                builder: (context, snapshot) {
+                  try {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (token != null) {
+                        return Controller();
+                      } else {
+                        return const Login();
+                      }
+                    }
+                  } catch (e) {
+                    // Handle any errors that might occur
+                  }
+                  return Container(); // Add a default return value
+                },
+              ),
         routes: {
           '/homecontroller': (context) => Controller(),
           '/home': (context) => const Home(),

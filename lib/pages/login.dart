@@ -73,44 +73,8 @@ class _LoginState extends State<Login> {
       // loginUser(_email.text, _password.text);
       box1.put('email', _email.text);
       box1.put('password', _password.text);
-      login();
-      // AuthService().login(context, _email.text, _password.text);
+      AuthService().login(context, _email.text, _password.text);
     }
-  }
-
-  void login() async {
-    final String baseUrl = '${Url.url}/login';
-    final Uri url = Uri.parse(baseUrl);
-    final Map<String, dynamic> data = {
-      'email': _email.text,
-      'password': _password.text
-    };
-    final response = await http.post(url,
-        headers: {'Content-Type': 'application/json'}, body: jsonEncode(data));
-    final responseData = json.decode(response.body);
-    if (response.statusCode == 200) {
-      final resData = jsonDecode(response.body);
-      // print(resData['result'][0]);
-      // final String userId = resData['result'][0]['id'].toString();
-      // final String name = resData['result'][0]['name'];
-      // final String email = resData['result'][0]['email'];
-      // final String password = resData['result'][0]['password'];
-      // final String phone = resData['result'][0]['phone'];
-
-      box1.put("name", resData['result'][0]['name']);
-      box1.put("email", resData['result'][0]['email']);
-      box1.put("id", resData['result'][0]['id']);
-      box1.put("isLogged", true);
-      // await storeToken(responseData['token'], userId.toString());
-      // final user = context.read<UserProvider>();
-      // user.setUserId(userId, name, email, phone, password);
-      Navigator.pushReplacementNamed(context, "/homecontroller");
-      // Navigator.pushNamed(context, "/homecontroller");
-    } else {
-      logger.e(response.body);
-    }
-
-    return responseData;
   }
 
   @override
