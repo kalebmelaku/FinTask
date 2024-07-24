@@ -61,9 +61,7 @@ class _ExpenseOptionsState extends State<ExpenseOptions> {
       setState(() {
         partners = responseJson['result'];
       });
-    } else {
-      // print(response.body);
-    }
+    } else {}
   }
 
   Future<void> deleteOption(taskId) async {
@@ -100,7 +98,6 @@ class _ExpenseOptionsState extends State<ExpenseOptions> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                
                 const Header(
                     pageName: "Expense Reasons",
                     pageDesc: "Add Expense Reason"),

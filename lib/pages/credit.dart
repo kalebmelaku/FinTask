@@ -28,6 +28,7 @@ class _CreditState extends State<Credit> {
   final formatCurrency = NumberFormat.currency(symbol: '\$', decimalDigits: 0);
   String? selectedDateTime;
   Logger logger = Logger();
+  bool isLoading = true;
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -53,8 +54,8 @@ class _CreditState extends State<Credit> {
       final responseJson = jsonDecode(response.body);
       setState(() {
         paidExpenses = responseJson['credit'];
+        isLoading = false;
       });
-      print(paidExpenses);
     } else {
       print(response.body);
     }
@@ -76,6 +77,7 @@ class _CreditState extends State<Credit> {
       final responseJson = jsonDecode(response.body);
       setState(() {
         expenses = responseJson['credit'];
+        isLoading = false;
       });
       if (_name.text.isNotEmpty) {
         logger.i(paidExpenses);
@@ -110,106 +112,112 @@ class _CreditState extends State<Credit> {
       child: Scaffold(
         backgroundColor: MyColors.backgroundColor,
         body: SafeArea(
-          child: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: TopInfo(),
-              ),
-              Expanded(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                  child: ListView(
-                    children: [
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   crossAxisAlignment: CrossAxisAlignment.center,
-                      //   children: [
-                      //     Expanded(
-                      //       child: makeInput(
-                      //         label: "Name",
-                      //         obscureText: false,
-                      //         keyType: TextInputType.text,
-                      //         controller: _name,
-                      //       ),
-                      //     ),
-                      //     SizedBox(
-                      //       width: 10.w,
-                      //     ),
-                      //     Expanded(
-                      //       child: Column(
-                      //         children: [
-                      //           const Text(""),
-                      //           const SizedBox(
-                      //             height: 5,
-                      //           ),
-                      //           MaterialButton(
-                      //             minWidth: double.infinity,
-                      //             height: 35.h,
-                      //             onPressed: () {
-                      //               print(expenses);
-                      //               print(paidExpenses);
-                      //               HapticFeedback.vibrate();
-                      //               fetchUnpaidExpenses();
-                      //               fetchPaidExpenses();
-                      //             },
-                      //             color: MyColors.primaryColor,
-                      //             elevation: 0,
-                      //             shape: RoundedRectangleBorder(
-                      //                 borderRadius: BorderRadius.circular(15)),
-                      //             child: Text(
-                      //               "Search",
-                      //               style: TextStyle(
-                      //                   fontWeight: FontWeight.w600,
-                      //                   fontSize: 15.sp,
-                      //                   color: Colors.white),
-                      //             ),
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     )
-                      //   ],
-                      // ),
-                      SizedBox(
-                        height: 20.h,
+          child: isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: TopInfo(),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 16),
+                        child: ListView(
+                          children: [
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   crossAxisAlignment: CrossAxisAlignment.center,
+                            //   children: [
+                            //     Expanded(
+                            //       child: makeInput(
+                            //         label: "Name",
+                            //         obscureText: false,
+                            //         keyType: TextInputType.text,
+                            //         controller: _name,
+                            //       ),
+                            //     ),
+                            //     SizedBox(
+                            //       width: 10.w,
+                            //     ),
+                            //     Expanded(
+                            //       child: Column(
+                            //         children: [
+                            //           const Text(""),
+                            //           const SizedBox(
+                            //             height: 5,
+                            //           ),
+                            //           MaterialButton(
+                            //             minWidth: double.infinity,
+                            //             height: 35.h,
+                            //             onPressed: () {
+                            //               print(expenses);
+                            //               print(paidExpenses);
+                            //               HapticFeedback.vibrate();
+                            //               fetchUnpaidExpenses();
+                            //               fetchPaidExpenses();
+                            //             },
+                            //             color: MyColors.primaryColor,
+                            //             elevation: 0,
+                            //             shape: RoundedRectangleBorder(
+                            //                 borderRadius: BorderRadius.circular(15)),
+                            //             child: Text(
+                            //               "Search",
+                            //               style: TextStyle(
+                            //                   fontWeight: FontWeight.w600,
+                            //                   fontSize: 15.sp,
+                            //                   color: Colors.white),
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     )
+                            //   ],
+                            // ),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Unpaid Credits",
+                                      style: TextStyle(fontSize: 20.sp),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 5.h),
+                                paidExpenses.isEmpty
+                                    ? const Center(
+                                        child:
+                                            Text("No Unpaid Credit Available"))
+                                    : buildAccordion(status: false),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Paid Credits",
+                                      style: TextStyle(fontSize: 20.sp),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 5.h),
+                                expenses.isEmpty
+                                    ? const Center(
+                                        child:
+                                            Text("No Payed Credit Available"))
+                                    : buildAccordion(status: true),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                "Unpaid Credits",
-                                style: TextStyle(fontSize: 20.sp),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 5.h),
-                          paidExpenses.isEmpty
-                              ? const Center(
-                                  child: Text("No Unpaid Credit Available"))
-                              : buildAccordion(status: false),
-                          Row(
-                            children: [
-                              Text(
-                                "Paid Credits",
-                                style: TextStyle(fontSize: 20.sp),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 5.h),
-                          expenses.isEmpty
-                              ? const Center(
-                                  child: Text("No Payed Credit Available"))
-                              : buildAccordion(status: true),
-                        ],
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );

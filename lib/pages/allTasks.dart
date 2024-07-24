@@ -39,9 +39,7 @@ class _AllTasksState extends State<AllTasks> {
       setState(() {
         tasks = responseJson['tasks'];
       });
-    } else {
-      // print(response.body);
-    }
+    } else {}
   }
 
   Future<void> fetchCompletedTasks() async {
@@ -55,9 +53,7 @@ class _AllTasksState extends State<AllTasks> {
       setState(() {
         completedTasks = responseJson['tasks'];
       });
-    } else {
-      // print(response.body);
-    }
+    } else {}
   }
 
   @override

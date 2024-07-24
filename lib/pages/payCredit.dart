@@ -40,9 +40,7 @@ class _PayCreditState extends State<PayCredit> {
       setState(() {
         partners = responseJson['tasks'];
       });
-    } else {
-      // print(response.body);
-    }
+    } else {}
   }
 
   Future<Map<String, dynamic>> payCredit() async {

@@ -35,6 +35,8 @@ dependencies:
   omni_datetime_picker: ^2.0.3
   rxdart: ^0.27.7
   timezone: ^0.9.4
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

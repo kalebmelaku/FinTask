@@ -40,9 +40,7 @@ class _AddCreditState extends State<AddCredit> {
       setState(() {
         partners = responseJson['tasks'];
       });
-    } else {
-      // print(response.body);
-    }
+    } else {}
   }
 
   Future<Map<String, dynamic>> addCredit() async {

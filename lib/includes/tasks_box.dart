@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import "package:FinTask/state/user_provider.dart";
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,7 +27,7 @@ class _TasksBoxState extends State<TasksBox> {
   List<Widget> taskWidget = [];
   late String userId;
   bool isLoading = true;
-
+  Logger logger = Logger();
   @override
   void initState() {
     userId = '';
@@ -63,7 +64,7 @@ class _TasksBoxState extends State<TasksBox> {
         // isLoading = false;
       });
     } else {
-      print(response.body);
+      logger.e(response.body);
       isLoading = false;
     }
   }
@@ -72,7 +73,11 @@ class _TasksBoxState extends State<TasksBox> {
     final userData = await authService.getToken();
     final user = userData['userId'];
     final page = widget.page;
-    final Map<String, dynamic> data = {'taskId': taskId, 'userId': user, 'page': page};
+    final Map<String, dynamic> data = {
+      'taskId': taskId,
+      'userId': user,
+      'page': page
+    };
     String uri = "${Url.url}/tasks/confirm";
     final Uri url = Uri.parse(uri);
     final response = await http.put(url,
@@ -85,7 +90,7 @@ class _TasksBoxState extends State<TasksBox> {
         isLoading = false;
       });
     } else {
-      print(response.body);
+      logger.e(response.body);
       isLoading = false;
     }
   }

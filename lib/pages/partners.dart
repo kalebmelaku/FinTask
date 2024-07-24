@@ -60,9 +60,7 @@ class _PartnersState extends State<Partners> {
       setState(() {
         partners = responseJson['tasks'];
       });
-    } else {
-      // print(response.body);
-    }
+    } else {}
   }
 
   Future<void> deletePartner(taskId) async {

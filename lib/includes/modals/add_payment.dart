@@ -42,9 +42,7 @@ class _AddPaymentState extends State<AddPayment> {
       setState(() {
         reasons = responseJson['result'];
       });
-    } else {
-      // print(response.body);
-    }
+    } else {}
   }
 
   Future<Map<String, dynamic>> addExpense() async {

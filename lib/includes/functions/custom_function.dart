@@ -3,14 +3,15 @@ import 'dart:convert';
 import 'package:FinTask/includes/url.dart';
 import 'package:FinTask/state/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 final String baseUrl = Url.url;
-
+Logger logger = Logger();
 Future<void> getUserInfo(BuildContext context, userId) async {
   // final Map<String, dynamic> data = {'password': password};
-  final Uri url = Uri.parse('$baseUrl/userInfo/$userId');
+  final Uri url = Uri.parse('$baseUrl/users/$userId');
   final response = await http.get(url);
   // final responseData = json.decode(response.body);
   if (response.statusCode == 201) {
@@ -25,6 +26,6 @@ Future<void> getUserInfo(BuildContext context, userId) async {
     final user = context.read<UserProvider>();
     user.setUserId(userId, name, email, phone, password);
   } else {
-    print(response.body);
+    logger.e(response.body);
   }
 }

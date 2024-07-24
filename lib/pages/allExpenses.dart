@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import "package:FinTask/includes/url.dart";
 import "package:FinTask/includes/auth_service.dart";
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
 class AllExpenses extends StatefulWidget {
@@ -25,6 +26,7 @@ class _AllExpensesState extends State<AllExpenses> {
   int totalAmount = 0;
   final formatCurrency = NumberFormat.currency(symbol: '\$', decimalDigits: 0);
   String? selectedDateTime;
+  Logger logger = Logger();
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -56,7 +58,7 @@ class _AllExpensesState extends State<AllExpenses> {
         totalAmount = calculateTotalAmount(expenses);
       });
     } else {
-      print(response.body);
+      logger.e(response.body);
     }
   }
 
