@@ -19,6 +19,7 @@ class _AllTasksState extends State<AllTasks> {
   final AuthService authService = AuthService();
   List<dynamic> tasks = [];
   List<dynamic> completedTasks = [];
+  bool isLoadingTasks = true;
   @override
   void initState() {
     fetchTasks();
@@ -38,6 +39,7 @@ class _AllTasksState extends State<AllTasks> {
       final responseJson = jsonDecode(response.body);
       setState(() {
         tasks = responseJson['tasks'];
+        isLoadingTasks = false;
       });
     } else {}
   }
@@ -52,6 +54,7 @@ class _AllTasksState extends State<AllTasks> {
       final responseJson = jsonDecode(response.body);
       setState(() {
         completedTasks = responseJson['tasks'];
+        isLoadingTasks = false;
       });
     } else {}
   }
@@ -71,50 +74,56 @@ class _AllTasksState extends State<AllTasks> {
         backgroundColor: MyColors.tertiaryColor,
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                child: ListView(
-                  children: [
-                    Text(
-                      "Upcoming",
-                      style: TextStyle(fontSize: 20.sp),
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    (tasks.isEmpty)
-                        ? const Center(
-                            child: Text("No Tasks Available for today"),
-                          )
-                        : TasksBox(tasks: tasks, page: 'task'),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Text(
-                      "Completed",
-                      style: TextStyle(fontSize: 20.sp),
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    (completedTasks.isEmpty)
-                        ? const Center(
-                            child: Text("No Tasks Available for today"),
-                          )
-                        : TasksBox(
-                            tasks: completedTasks,
-                            page: 'task',
-                          ),
-                  ],
+        child: isLoadingTasks
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
                 ),
+              )
+            : Column(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 16),
+                      child: ListView(
+                        children: [
+                          Text(
+                            "Upcoming",
+                            style: TextStyle(fontSize: 20.sp),
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          (tasks.isEmpty)
+                              ? const Center(
+                                  child: Text("No Tasks Available for today"),
+                                )
+                              : TasksBox(tasks: tasks, page: 'task'),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          Text(
+                            "Completed",
+                            style: TextStyle(fontSize: 20.sp),
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          (completedTasks.isEmpty)
+                              ? const Center(
+                                  child: Text("No Tasks Available for today"),
+                                )
+                              : TasksBox(
+                                  tasks: completedTasks,
+                                  page: 'task',
+                                ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
       ),
     );
   }
