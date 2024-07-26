@@ -12,6 +12,7 @@ import "package:FinTask/includes/url.dart";
 import "package:FinTask/state/user_provider.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:logger/logger.dart";
 import "package:provider/provider.dart";
 import 'package:http/http.dart' as http;
 
@@ -29,8 +30,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   List<dynamic> tasks = [];
   List<dynamic> expenses = [];
   late String userId;
-  bool isLoading = true;
+  bool isLoading = false;
   bool tabs = true;
+  Logger logger = Logger();
   @override
   void initState() {
     super.initState();
@@ -52,7 +54,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       final responseJson = jsonDecode(response.body);
       setState(() {
         tasks = responseJson['tasks'];
-        isLoading = false;
       });
     } else {
       // print(response.body);
@@ -69,7 +70,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       final responseJson = jsonDecode(response.body);
       setState(() {
         expenses = responseJson['result'];
-        isLoading = false;
       });
     } else {
       // print(response.body);
@@ -94,89 +94,95 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           builder: (context, value, child) => Scaffold(
                 backgroundColor: MyColors.backgroundColor,
                 body: SafeArea(
-                  child: isLoading ? Center(child: CircularProgressIndicator(),)
-                  : Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: TopInfo(),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 16),
-                          child: ListView(
-                            children: [
-                              const CreditCard(),
-                              const Options(),
-                              SizedBox(
-                                height: 15.h,
-                              ),
-                              Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                  child: isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : Column(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: TopInfo(),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 16),
+                                child: ListView(
                                   children: [
-                                    Text(
-                                      "Today's Tasks",
-                                      style: TextStyle(fontSize: 15.sp),
+                                    const CreditCard(),
+                                    const Options(),
+                                    SizedBox(
+                                      height: 15.h,
                                     ),
-                                    TextButton(
-                                      onPressed: () => {
-                                        Navigator.pushNamed(
-                                            context, '/allTasks')
-                                      },
-                                      child: Text(
-                                        "See All",
-                                        style: TextStyle(
-                                            fontSize: 15.sp,
-                                            color: Colors.white),
-                                      ),
+                                    Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Today's Tasks",
+                                            style: TextStyle(fontSize: 15.sp),
+                                          ),
+                                          TextButton(
+                                            onPressed: () => {
+                                              Navigator.pushNamed(
+                                                  context, '/allTasks')
+                                            },
+                                            child: Text(
+                                              "See All",
+                                              style: TextStyle(
+                                                  fontSize: 15.sp,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ]),
+                                    (tasks.isEmpty)
+                                        ? const Center(
+                                            child: Text(
+                                                "No Tasks Available for today"),
+                                          )
+                                        : TasksBox(tasks: tasks, page: 'home'),
+                                    SizedBox(
+                                      height: 15.h,
                                     ),
-                                  ]),
-                              (tasks.isEmpty)
-                                  ? const Center(
-                                      child:
-                                          Text("No Tasks Available for today"),
-                                    )
-                                  : TasksBox(tasks: tasks, page: 'home'),
-                              SizedBox(
-                                height: 15.h,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Today's Expenses",
+                                          style: TextStyle(fontSize: 15.sp),
+                                        ),
+                                        TextButton(
+                                          onPressed: () => {
+                                            Navigator.pushNamed(
+                                                context, '/allExpenses')
+                                          },
+                                          child: Text(
+                                            "See All",
+                                            style: TextStyle(
+                                                fontSize: 15.sp,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    (expenses.isEmpty)
+                                        ? const Center(
+                                            child: Text(
+                                                "No Expenses Available for today"),
+                                          )
+                                        : ExpenseBox(expenses: expenses),
+                                  ],
+                                ),
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Today's Expenses",
-                                    style: TextStyle(fontSize: 15.sp),
-                                  ),
-                                  TextButton(
-                                    onPressed: () => {
-                                      Navigator.pushNamed(
-                                          context, '/allExpenses')
-                                    },
-                                    child: Text(
-                                      "See All",
-                                      style: TextStyle(
-                                          fontSize: 15.sp, color: Colors.white),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              (expenses.isEmpty)
-                                  ? const Center(
-                                      child: Text(
-                                          "No Expenses Available for today"),
-                                    )
-                                  : ExpenseBox(expenses: expenses),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
                 ),
               )),
     );

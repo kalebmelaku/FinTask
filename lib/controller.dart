@@ -1,6 +1,5 @@
 import 'package:FinTask/includes/auth_service.dart';
 import 'package:FinTask/includes/colors.dart';
-import 'package:FinTask/includes/functions/custom_function.dart';
 import 'package:FinTask/includes/modal.dart';
 import 'package:FinTask/pages/credit.dart';
 import 'package:FinTask/pages/expense.dart';
@@ -33,16 +32,16 @@ class _ControllerState extends State<Controller> {
   @override
   void initState() {
     onItemTapped(widget.selectedIndex);
-    getAuth();
+    // getAuth();
     super.initState();
   }
 
-  void getAuth() async {
-    final userData = await authService.getToken();
-    final userId = userData['userId'];
+  // void getAuth() async {
+  //   final userData = await authService.getToken();
+  //   final userId = userData['userId'];
 
-    getUserInfo(context, userId);
-  }
+  //   getUserInfo(context, userId);
+  // }
 
   final List<Widget> pages = [
     const Home(),

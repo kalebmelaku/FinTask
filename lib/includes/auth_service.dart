@@ -51,8 +51,8 @@ class AuthService {
 
       final user = context.read<UserProvider>();
       user.setUserId(userId, name, email, phone, password);
-      // Navigator.pushReplacementNamed(context, "/homecontroller");
-      Navigator.pushNamed(context, "/homecontroller");
+      Navigator.pushReplacementNamed(context, "/homecontroller");
+      // Navigator.pushNamed(context, "/homecontroller");
     } else {
       logger.e(response.body);
     }

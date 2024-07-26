@@ -11,7 +11,6 @@ class UserProvider extends ChangeNotifier {
   String get phone => _phone;
   String get password => _password;
   String get email => _email;
-
   void setUserId(
       String userId, String name, String email, String phone, String password) {
     _userId = userId;

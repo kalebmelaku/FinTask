@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 final String baseUrl = Url.url;
 Logger logger = Logger();
 Future<void> getUserInfo(BuildContext context, userId) async {
+  print(userId);
   // final Map<String, dynamic> data = {'password': password};
   final Uri url = Uri.parse('$baseUrl/users/$userId');
   final response = await http.get(url);

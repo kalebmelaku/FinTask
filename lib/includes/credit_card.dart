@@ -22,6 +22,7 @@ class _CreditCardState extends State<CreditCard> {
   var logger = Logger();
   int deposit = 0;
   int credit = 0;
+  bool isLoading = true;
   @override
   void initState() {
     super.initState();
@@ -41,6 +42,7 @@ class _CreditCardState extends State<CreditCard> {
       final responseData = jsonDecode(response.body);
       setState(() {
         deposit = responseData['depositAmount'];
+        isLoading = false;
       });
     } else {
       logger.e(response.body);
@@ -48,6 +50,7 @@ class _CreditCardState extends State<CreditCard> {
   }
 
   Future<void> getCredit() async {
+    // final loadingState = context.read<UserProvider>();
     final user = context.read<UserProvider>();
     final userId = user.userId;
     String uri = "${Url.url}/credit/total/$userId";
@@ -58,6 +61,7 @@ class _CreditCardState extends State<CreditCard> {
       final responseData = jsonDecode(response.body);
       setState(() {
         credit = responseData['resultTotal']['creditTotal'];
+        isLoading = false;
       });
     } else {
       logger.e(response.body);
@@ -162,10 +166,14 @@ class _CreditCardState extends State<CreditCard> {
                                 SizedBox(
                                   height: 5.h,
                                 ),
-                                Text(
-                                  formatCurrency.format(deposit),
-                                  style: TextStyle(fontSize: 20.sp),
-                                ),
+                                isLoading
+                                    ? const CircularProgressIndicator(
+                                        color: Colors.white,
+                                      )
+                                    : Text(
+                                        formatCurrency.format(deposit),
+                                        style: TextStyle(fontSize: 20.sp),
+                                      ),
                               ],
                             )
                           ],
@@ -191,10 +199,13 @@ class _CreditCardState extends State<CreditCard> {
                                 SizedBox(
                                   height: 5.h,
                                 ),
-                                Text(
-                                  formatCurrency.format(credit),
-                                  style: TextStyle(fontSize: 20.sp),
-                                ),
+                                isLoading
+                                    ? const CircularProgressIndicator(
+                                        color: Colors.white)
+                                    : Text(
+                                        formatCurrency.format(credit),
+                                        style: TextStyle(fontSize: 20.sp),
+                                      ),
                               ],
                             )
                           ],
